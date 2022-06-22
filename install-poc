@@ -1,0 +1,18 @@
+#Brewing a DBP Machine installer for clean installs on MacOS
+
+#Install homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install tree
+brew install tree
+
+# Install MacOS applications for DBP
+brew cask install google-chrome
+brew cask install google-drive
+brew cask install google-chat
+brew install --cask jump-desktop-connect
+brew install --cask teamviewer
+
+
+#Checkup for the total installed packages on the machine
+brew doctor
