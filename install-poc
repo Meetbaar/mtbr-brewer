@@ -12,6 +12,13 @@ brew cask install google-drive
 brew cask install google-chat
 brew install --cask jump-desktop-connect
 brew install --cask teamviewer
+brew cask install vlc
+
+#delete applications
+#delete garageband
+#delete keynote
+#delete numbers
+#delete pages
 
 
 #Checkup for the total installed packages on the machine
