@@ -7,15 +7,14 @@
 brew install tree
 
 # Install MacOS applications for DBP
-brew cask install google-chrome
-brew cask install google-drive
-brew cask install google-chat
+brew install --cask google-chrome
+brew install --cask google-drive
+brew install --cask google-chat
 brew install --cask microsoft-remote-desktop
 #brew install --cask jump-desktop-connect
 brew install --cask teamviewer
 brew install --cask spotify
-
-brew cask install vlc
+brew install --cask vlc
 
 
 #delete applications
