@@ -10,12 +10,19 @@ brew install tree
 brew cask install google-chrome
 brew cask install google-drive
 brew cask install google-chat
-brew install --cask jump-desktop-connect
+brew install --cask microsoft-remote-desktop
+#brew install --cask jump-desktop-connect
 brew install --cask teamviewer
+brew install --cask spotify
+
 brew cask install vlc
+
 
 #delete applications
 #delete garageband
+locate GarageBand
+#sudo uninstall file:///Applications/GarageBand
+
 #delete keynote
 #delete numbers
 #delete pages
