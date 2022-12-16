@@ -6,22 +6,44 @@
 # Install tree
 brew install tree
 
-# Install MacOS applications for DBP
-brew install --cask google-chrome
-brew install --cask google-drive
-brew install --cask google-chat
-brew install --cask microsoft-remote-desktop
-#brew install --cask jump-desktop-connect
-brew install --cask teamviewer
-brew install --cask spotify
-brew install --cask vlc
+echo "Please enter e-mail employee? "
+read email_employee
+echo "Installatie voor: $email_employee is gestart"
+
+echo -ne '#####                     (33%)\r'
+sleep 1
+echo -ne '#############             (66%)\r'
+sleep 1
+echo -ne '#######################   (100%)\r'
+echo -ne '\n'
+
+printf 'Wil je ook de default DBP applicaties voor" $email_employee "installeren (y/n)?'
+read answer
+
+if [ "$answer" != "${answer#[Yy]}" ] ;then
+    echo Hold your seat!
+    echo -ne '#                         (2%)\r'
+    sleep 1
+    echo -ne '#############             (66%)\r'
+    sleep 1
+    echo -ne '#######################   (100%)\r'
+    echo -ne '\n'
+    brew install --cask google-chrome
+    brew install --cask google-drive
+    brew install --cask google-chat
+    brew install --cask microsoft-remote-desktop
+    brew install --cask teamviewer
+    brew install --cask spotify
+    brew install --cask vlc
+else
+    echo No
+fi
+
 
 #delete applications
 #delete garageband
 rm -rf file:///Applications/GarageBand.app
-rm -rf file:///Applications/GarageBand.app
-rm -rf file:///Applications/GarageBand.app
-rm -rf file:///Applications/GarageBand.app
+rm -rf file:///Applications//Applications/Betaflight\ Configurator.app 
 
 
 #config the remote desktop app with setup except credentials
@@ -29,7 +51,9 @@ rm -rf file:///Applications/GarageBand.app
 #als de dir niet bestaat aanmaken
 mkdir /Applications/M-RDP-config
 nano /Applications/M-RDP-config/eLive-WerkplekOnline.rdp
-echo "armpath:s:
+
+sudo ex +"r /Applications/M-RDP-config" -cwq test-rdp-output.rdp <<-EOF
+armpath:s:
 targetisaadjoined:i:0
 hubdiscoverygeourl:s:
 redirected video capture encoding quality:i:0
@@ -82,7 +106,7 @@ allow font smoothing:i:1
 connect to console:i:0
 disable wallpaper:i:0
 gatewayaccesstoken:s:
-" > ~/Applications/M-RDP-config/eLive-WerkplekOnline.rdp
+EOF
 
 
 
