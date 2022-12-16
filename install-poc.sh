@@ -16,16 +16,13 @@ brew install --cask teamviewer
 brew install --cask spotify
 brew install --cask vlc
 
-
 #delete applications
 #delete garageband
-locate GarageBand
-#sudo uninstall file:///Applications/GarageBand.app
-sudo rm -rf file:///Applications/GarageBand.app
+rm -rf file:///Applications/GarageBand.app
+rm -rf file:///Applications/GarageBand.app
+rm -rf file:///Applications/GarageBand.app
+rm -rf file:///Applications/GarageBand.app
 
-#delete keynote
-#delete numbers
-#delete pages
 
 #config the remote desktop app with setup except credentials
 
