@@ -1,5 +1,5 @@
 #Brewing a DBP Machine installer for clean installs on MacOS
-/bin/bash -c "$(curl -fsSL https://github.com/YloXx/dbp-brewer/edit/main/install-poc.sh)"
+#/bin/bash -c "$(curl -fsSL https://github.com/YloXx/dbp-brewer/edit/main/install-poc.sh)"
 
 #Get and Install homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
