@@ -21,7 +21,7 @@ sleep 2
 echo -ne '#######################   (100%)\r'
 echo -ne '\n'
 
-printf 'Do you want to install default DBP applications' $email_employee ' Select (y/n)?'
+printf "Do you want to install default DBP applications" $email_employee " Select (y/n)?"
 read answer
 
 if [ "$answer" != "${answer#[Yy]}" ] ;then
