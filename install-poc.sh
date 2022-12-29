@@ -1,27 +1,33 @@
 #Brewing a DBP Machine installer for clean installs on MacOS
+/bin/bash -c "$(curl -fsSL https://github.com/YloXx/dbp-brewer/edit/main/install-poc.sh)"
 
-#Install homebrew
+#Get and Install homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Install tree
+#Install tree
 brew install tree
 
+#install employee and applications for employee
 echo "Please enter e-mail employee? "
 read email_employee
-echo "Installatie voor: $email_employee is gestart"
+echo "Install started for user: $email_employee on MacOS"
 
 echo -ne '#####                     (33%)\r'
 sleep 1
-echo -ne '#############             (66%)\r'
+echo -ne '#########                 (41%)\r'
 sleep 1
+echo -ne '##################        (73%)\r'
+sleep 2
 echo -ne '#######################   (100%)\r'
 echo -ne '\n'
 
-printf 'Wil je ook de default DBP applicaties voor" $email_employee "installeren (y/n)?'
+printf 'Do you want to install default DBP applications' $email_employee ' Select (y/n)?'
 read answer
 
 if [ "$answer" != "${answer#[Yy]}" ] ;then
     echo Hold your seat!
+    echo -ne 'Prepare: Google Chrome, Drive, Chat, MS Remote desktop, Teamviewer, Spotify and many more...'
+    sleep 1
     echo -ne '#                         (2%)\r'
     sleep 1
     echo -ne '#############             (66%)\r'
@@ -36,13 +42,14 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     brew install --cask spotify
     brew install --cask vlc
 else
-    echo No
+    echo 'No'
+    sleep 5
 fi
 
 
 #delete applications
 #delete garageband
-rm -rf file:///Applications/GarageBand.app
+#rm -rf file:///Applications/GarageBand.app
 rm -rf file:///Applications//Applications/Betaflight\ Configurator.app 
 
 
@@ -107,7 +114,6 @@ connect to console:i:0
 disable wallpaper:i:0
 gatewayaccesstoken:s:
 EOF
-
 
 
 #Checkup for the total installed packages on the machine
