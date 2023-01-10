@@ -1,3 +1,3 @@
 # dbp-brewer
 
-Clean installer script for new nodes in DB&P
+Clean installer script for new nodes in DBP-domain
