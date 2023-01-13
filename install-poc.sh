@@ -1,27 +1,41 @@
-#Brewing a DBP Machine installer for clean installs on MacOS
-#/bin/bash -c "$(curl -fsSL https://github.com/YloXx/dbp-brewer/edit/main/install-poc.sh)"
+#! /bin/bash
 
-#Get and Install homebrew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo system_profiler SPSoftwareDataType
 
-#Install tree
+echo "    ____  ____  ____  "                   
+echo "   / __ \/ __ )/ __ \ "                 
+echo "  / / / / __  / /_/ / "                   
+echo " / /_/ / /_/ / ____/  "                   
+echo "/_____/_____/_/       "  
+echo " "
+echo "    _            __        ____         "
+echo "   (_)___  _____/ /_____ _/ / /__  _____"
+echo "  / / __ \/ ___/ __/ __ \/ / / _ \/ ___/"
+echo " / / / / (__  ) /_/ /_/ / / /  __/ /    "
+echo "/_/_/ /_/____/\__/\____/_/_/\___/_/     "
+
+
+
+curl -fsSL https://github.com/YloXx/dbp-brewer/edit/main/install-poc.sh
+
+#/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
 brew install tree
 
-#install employee and applications for employee
-echo "Please enter e-mail employee? "
+echo "Please enter e-mail employee?"
 read email_employee
 echo "Install started for user: $email_employee on MacOS"
 
-echo -ne '#####                     (33%)\r'
+echo -ne "#####                     (33%)\r"
 sleep 1
-echo -ne '#########                 (41%)\r'
+echo -ne "#########                 (41%)\r"
 sleep 1
-echo -ne '##################        (73%)\r'
+echo -ne "##################        (73%)\r"
 sleep 2
-echo -ne '#######################   (100%)\r'
-echo -ne '\n'
+echo -ne "#######################   (100%)\r"
+echo -ne "\n"
 
-printf "Do you want to install default DBP applications" $email_employee " Select (y/n)?"
+printf "Do you want to install default DBP applications $email_employee, Select (y/n)?"
 read answer
 
 if [ "$answer" != "${answer#[Yy]}" ] ;then
@@ -68,14 +82,14 @@ dock_item() {
     printf '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>%s</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>', "$1" 
 } 
 
-chrome=$(dock_item /System/Applications/Google Chrome.app) 
-docs=$(dock_item /System/Applications/Google Docs.app)
-sheets=$(dock_item /System/Applications/Google Sheets.app) 
-slides=$(dock_item /System/Applications/Google Slides.app) 
-drive=$(dock_item /System/Applications/Google Drive.app) 
-teamviewer=$(dock_item /System/Applications/TeamViewer.app)
-msrdp=$(dock_item /System/Applications/TeamViewer.app) 
-spotify=$(dock_item /System/Applications/Spotify.app) 
+chrome=$(dock_item /Applications/Google Chrome.app) 
+docs=$(dock_item /Applications/Google Docs.app)
+sheets=$(dock_item /Applications/Google Sheets.app) 
+slides=$(dock_item /Applications/Google Slides.app) 
+drive=$(dock_item /Applications/Google Drive.app) 
+teamviewer=$(dock_item /Applications/TeamViewer.app)
+msrdp=$(dock_item /Applications/TeamViewer.app) 
+spotify=$(dock_item /Applications/Spotify.app) 
 
 sudo su $LOGGED_USER -c "defaults write com.apple.dock persistent-apps -array '$chome' '$docs' '$sheets' '$slides' '$drive' '$teamviewer' '$msrdp' '$spotify'" 
 killall Dock 
