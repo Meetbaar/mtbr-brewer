@@ -2,23 +2,9 @@
 
 echo system_profiler SPSoftwareDataType
 
-echo "    ____  ____  ____  "                   
-echo "   / __ \/ __ )/ __ \ "                 
-echo "  / / / / __  / /_/ / "                   
-echo " / /_/ / /_/ / ____/  "                   
-echo "/_____/_____/_/       "  
-echo " "
-echo "    _            __        ____         "
-echo "   (_)___  _____/ /_____ _/ / /__  _____"
-echo "  / / __ \/ ___/ __/ __ \/ / / _ \/ ___/"
-echo " / / / / (__  ) /_/ /_/ / / /  __/ /    "
-echo "/_/_/ /_/____/\__/\____/_/_/\___/_/     "
-
-
-
 curl -fsSL https://github.com/YloXx/dbp-brewer/edit/main/install-poc.sh
 
-#/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
 
 brew install tree
 
