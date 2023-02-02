@@ -1,33 +1,78 @@
 #! /bin/bash
 
-echo system_profiler SPSoftwareDataType
+echo "dbp-brewer ¯\\\_(ツ)_/¯ V1.0 \r\r"
+echo ""
+echo "You are going to install the dbp-brewer for the following system!"
+array=$( system_profiler SPSoftwareDataType )
 
-curl -fsSL https://github.com/YloXx/dbp-brewer/edit/main/install-poc.sh
+for i in "${array[@]}"; do
+    echo "- $i"
+done
 
-curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
-
-brew install tree
-
-echo "Please enter e-mail employee?"
-read email_employee
-echo "Install started for user: $email_employee on MacOS"
-
-echo -ne "#####                     (33%)\r"
-sleep 1
-echo -ne "#########                 (41%)\r"
+echo -ne "#                         (1%)\r"
+sleep 2
+echo -ne "##############            (56%)\r"
 sleep 1
 echo -ne "##################        (73%)\r"
-sleep 2
+sleep 1
 echo -ne "#######################   (100%)\r"
 echo -ne "\n"
+echo "Get and install homebrew"
+sleep 1
 
-printf "Do you want to install default DBP applications $email_employee, Select (y/n)?"
+curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+brew install tree
+
+sleep 2
+echo $(whoami)
+echo "[CONFIG] installation for $USER"
+echo "Please enter the e-mailaddress of the current employee?"
+read email_employee
+echo "We are creating config files for: $email_employee on MacOS"
+echo "Please enter the employee initials, example: Name is John Doe, fill in JD"
+read computerName
+
+if [ "$computerName" != "" ] ;then
+	$(sudo scutil --set ComputerName "DBP-"$computerName)
+	$(sudo scutil --set LocalHostName "DBP-"$computerName)
+fi
+
+echo "Do you want to add an default Admin account, select (y/n)?"
+read default_admin
+
+if [ "$default_admin" != "${default_admin#[Yy]}" ] ;then
+	
+	adminpass=
+	echo "Fill in a password for the default Admin"
+	while [[ $adminpass == "" ]]; do
+		read adminpass
+	done
+
+	if [ "$adminpass" != "" ] ; then
+		$(sudo dscl . -create /Users/beheer)
+		$(sudo dscl . -create /Users/beheer UserShell /bin/bash)
+		$(sudo dscl . -create /Users/beheer RealName Beheer)
+		$(sudo dscl . -create /Users/beheer UniqueID 1001)
+		$(sudo dscl . -create /Users/beheer PrimaryGroupID 1000)
+		$(sudo dscl . -passwd /Users/beheer "$adminpass")
+		$(sudo dscl . -append /Groups/admin GroupMembership beheer)
+	else
+		echo "the adminpass is empty"
+	fi
+
+fi
+
+echo "Admin succesfully created"
+
+sleep 2
+
+echo  "Do you want to install default DBP applications $email_employee select?"
 read answer
 
 if [ "$answer" != "${answer#[Yy]}" ] ;then
-    echo Hold your seat!
-    echo -ne 'Prepare: Google Chrome, Drive, Chat, MS Remote desktop, Teamviewer, Spotify and many more...'
-    sleep 1
+    echo "Hold your seat..! \n"
+    echo -ne 'Prepare: Google Chrome, Drive, Chat, MS Remote desktop, teamviewer, Spotify and many more...\n'
+    sleep 2
     echo -ne '#                         (2%)\r'
     sleep 1
     echo -ne '#############             (66%)\r'
@@ -41,26 +86,89 @@ if [ "$answer" != "${answer#[Yy]}" ] ;then
     brew install --cask teamviewer
     brew install --cask spotify
     brew install --cask vlc
+
+    echo -ne '#############             (66%)\r'
+    sleep 1
+    echo -ne '#######################   (100%)\r'
+    echo -ne '\n'
+    rdpconfigfile=/Applications/M-RDP-config/eLive-WerkplekOnline.rdp
+    if [ -f "$rdpconfigfile" ]; then
+        echo "RDP config exists."
+    else 
+        echo "RDP config does not exist."
+        echo "So lets create some configs!"
+        echo -ne '#################         (81%)\r'
+        sleep 1
+        echo -ne '#######################   (100%)\r'
+        echo -ne '\n'
+        mkdir /Applications/M-RDP-config && touch $rdpconfigfile
+        
+        cat <<< "smart sizing:i:0
+armpath:s:
+targetisaadjoined:i:0
+hubdiscoverygeourl:s:
+redirected video capture encoding quality:i:0
+camerastoredirect:s:
+gatewaybrokeringtype:i:0
+use redirection server name:i:0
+alternate shell:s:
+disable themes:i:0
+geo:s:
+disable cursor setting:i:1
+remoteapplicationname:s:
+resourceprovider:s:
+disable menu anims:i:1
+remoteapplicationcmdline:s:
+promptcredentialonce:i:0
+gatewaycertificatelogonauthority:s:
+audiocapturemode:i:0
+prompt for credentials on client:i:0
+gatewayhostname:s:desktop.elive.nl
+remoteapplicationprogram:s:
+gatewayusagemethod:i:2
+screen mode id:i:2
+use multimon:i:0
+authentication level:i:2
+desktopwidth:i:0
+desktopheight:i:0
+redirectsmartcards:i:0
+redirectclipboard:i:1
+forcehidpioptimizations:i:0
+full address:s:eli-ts-dbp.elive.nl:3389
+drivestoredirect:s:*
+loadbalanceinfo:s:
+networkautodetect:i:1
+enablecredsspsupport:i:1
+redirectprinters:i:1
+autoreconnection enabled:i:1
+session bpp:i:32
+administrative session:i:0
+audiomode:i:0
+bandwidthautodetect:i:1
+authoring tool:s:
+connection type:i:7
+remoteapplicationmode:i:0
+disable full window drag:i:0
+gatewayusername:s:$email_employee
+dynamic resolution:i:0
+shell working directory:s:
+wvd endpoint pool:s:
+remoteapplicationappid:s:
+username:s:$email_employee
+allow font smoothing:i:1
+connect to console:i:0
+disable wallpaper:i:0
+gatewayaccesstoken:s:" > $rdpconfigfile
+        cat $rdpconfigfile
+
+    fi
+
 else
-    echo 'No'
-    sleep 5
+    echo "Clean installation without apps!"
 fi
 
+sleep 1
 
-# Delete obsolete applications
-#rm -rf file:///Applications/GarageBand.app
-sudo rm –rf /System/Applications/Betaflight Configurator.app
-sudo rm –rf /System/Applications/Stocks.app
-
-
-# config the remote desktop app with setup except credentials
-
-#als de dir niet bestaat aanmaken
-mkdir /Applications/M-RDP-config
-nano /Applications/M-RDP-config/eLive-WerkplekOnline.rdp
-
-
-# Dockinstall make shure it is bash and sudo 
 LOGGED_USER=`stat -f%Su /dev/console` 
 sudo su $LOGGED_USER -c 'defaults delete com.apple.dock persistent-apps' 
 
@@ -74,17 +182,19 @@ sheets=$(dock_item /Applications/Google Sheets.app)
 slides=$(dock_item /Applications/Google Slides.app) 
 drive=$(dock_item /Applications/Google Drive.app) 
 teamviewer=$(dock_item /Applications/TeamViewer.app)
-msrdp=$(dock_item /Applications/TeamViewer.app) 
+msrdp=$(dock_item /Applications/Microsoft Remote Desktop.app) 
 spotify=$(dock_item /Applications/Spotify.app) 
 
-sudo su $LOGGED_USER -c "defaults write com.apple.dock persistent-apps -array '$chome' '$docs' '$sheets' '$slides' '$drive' '$teamviewer' '$msrdp' '$spotify'" 
+sudo su $LOGGED_USER -c "defaults write com.apple.dock persistent-apps 
+-array '$chrome' '$docs' '$sheets' '$slides' '$drive' '$teamviewer' 
+'$msrdp' '$spotify'" 
 killall Dock 
 
-
-# Checkup for the total installed packages on the machine
 brew doctor
 
-# turnon fireall for everyone
+echo "Turn on firewall\n"
 sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 1 
 
-
+echo -ne 'Closing installer and prepare to work\n'
+sleep 2
+killall terminal
