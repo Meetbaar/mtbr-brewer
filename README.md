@@ -9,7 +9,7 @@ dbp-brewer is a Proof of concept for slingle line clean installer script for new
 
 Get the latest version of the script and run the install
 
-    #/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/YloXx/dbp-brewer/main/install-poc.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/YloXx/dbp-brewer/main/install-poc.sh)"
     
 Enter the credentials for the new user and have fun!
 
