@@ -20,7 +20,7 @@ echo -ne "\n"
 echo "Get and install homebrew"
 sleep 1
 
-curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install tree
 
 sleep 2
@@ -63,7 +63,6 @@ if [ "$default_admin" != "${default_admin#[Yy]}" ] ;then
 fi
 
 echo "Admin succesfully created"
-
 sleep 2
 
 echo  "Do you want to install default DBP applications $email_employee select?"
