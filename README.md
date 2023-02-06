@@ -12,6 +12,7 @@ Get the latest version of the script and run the install
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/YloXx/dbp-brewer/main/install-poc.sh)"
 
 Delete zoom
+
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/YloXx/dbp-brewer/main/uninstallers/remove-zoom.sh)"
     
 Enter the credentials for the new user and have fun!
