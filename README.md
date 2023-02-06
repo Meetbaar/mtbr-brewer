@@ -18,3 +18,8 @@ Enter the credentials for the new user and have fun!
 It gets the latest repo's of brew and install al the needed software for a person at this time!
 After the install of the latest repos the script created userfiles for en set those for the user.
 and at least the correct settings wil be deployed for a specific user.
+
+## Features
+- embedding application uninstallers
+- .bashrc file create and edit
+- .macos file create and edit
