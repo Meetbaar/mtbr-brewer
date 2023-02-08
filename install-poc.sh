@@ -54,6 +54,7 @@ if [ "$default_admin" != "${default_admin#[Yy]}" ] ;then
 		$(sudo dscl . -create /Users/beheer RealName Beheer)
 		$(sudo dscl . -create /Users/beheer UniqueID 1001)
 		$(sudo dscl . -create /Users/beheer PrimaryGroupID 1000)
+		$(sudo dscl . -create /Users/username NFSHomeDirectory /Local/Users/beheer)
 		$(sudo dscl . -passwd /Users/beheer "$adminpass")
 		$(sudo dscl . -append /Groups/admin GroupMembership beheer)
 	else
