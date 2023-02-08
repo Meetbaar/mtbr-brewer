@@ -21,9 +21,12 @@ echo "Get and install homebrew"
 sleep 1
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install tree
 
-sleep 2
+echo 'eval $(/opt/homebrew/bin/brew shellenv)' >> /Users/$USER/.zprofile
+
+sleep 1
+brew install tree
+sleep 1
 echo $(whoami)
 echo "[CONFIG] installation for $USER"
 echo "Please enter the e-mailaddress of the current employee?"
@@ -40,7 +43,7 @@ fi
 echo "Do you want to add an default Admin account, select (y/n)?"
 read default_admin
 
-if [ "$default_admin" != "${default_admin#[Yy]}" ] ;then
+if [ "$default_admin" != "${default_admin#[Yy]}" ] ; then
 	
 	adminpass=
 	echo "Fill in a password for the default Admin"
@@ -57,16 +60,12 @@ if [ "$default_admin" != "${default_admin#[Yy]}" ] ;then
 		$(sudo dscl . -create /Users/beheer NFSHomeDirectory /Local/Users/beheer)
 		$(sudo dscl . -passwd /Users/beheer "$adminpass")
 		$(sudo dscl . -append /Groups/admin GroupMembership beheer)
-	else
-		echo "the adminpass is empty"
 	fi
-
 fi
 
 echo "Admin succesfully created"
-sleep 2
-
-echo  "Do you want to install default DBP applications $email_employee select?"
+sleep 1
+echo  "Do you want to install default DBP applications $email_employee select (y/n)?"
 read answer
 
 if [ "$answer" != "${answer#[Yy]}" ] ;then
@@ -173,7 +172,7 @@ LOGGED_USER=`stat -f%Su /dev/console`
 sudo su $LOGGED_USER -c 'defaults delete com.apple.dock persistent-apps' 
 
 dock_item() { 
-    printf '<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>%s</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>', "$1" 
+    printf "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>%s</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>", "$1" 
 } 
 
 chrome=$(dock_item /Applications/Google Chrome.app) 
@@ -183,15 +182,12 @@ slides=$(dock_item /Applications/Google Slides.app)
 drive=$(dock_item /Applications/Google Drive.app) 
 teamviewer=$(dock_item /Applications/TeamViewer.app)
 msrdp=$(dock_item /Applications/Microsoft Remote Desktop.app) 
-spotify=$(dock_item /Applications/Spotify.app) 
+spotify=$(dock_item /Applications/Spotify.app)
 
-sudo su $LOGGED_USER -c "defaults write com.apple.dock persistent-apps 
--array '$chrome' '$docs' '$sheets' '$slides' '$drive' '$teamviewer' 
-'$msrdp' '$spotify'" 
-killall Dock 
+sudo su $LOGGED_USER -c "defaults write com.apple.dock persistent-apps -array-add '$chrome' '$docs' '$sheets' '$slides' '$drive' '$teamviewer' '$msrdp' '$spotify'"; killall Dock 
 
-brew doctor
-
+echo "Preparing system essentials\n"
+sleep 1
 echo "Turn on firewall\n"
 sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 1 
 
