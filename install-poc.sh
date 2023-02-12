@@ -191,6 +191,8 @@ sleep 1
 echo "Turn on firewall\n"
 sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 1 
 
+sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup;
+
 echo -ne 'Closing installer and prepare to work\n'
 sleep 2
 killall terminal
