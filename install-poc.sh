@@ -9,6 +9,11 @@ for i in "${array[@]}"; do
     echo "- $i"
 done
 
+sleep 2
+osascript -e 'tell application "System Preferences" to quit'
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
 echo -ne "#                         (1%)\r"
 sleep 2
 echo -ne "##############            (56%)\r"
