@@ -1,6 +1,6 @@
 #! /bin/bash
 
-echo "dbp-brewer ¯\\\_(ツ)_/¯ V1.0 \r\r"
+echo "dbp-brewer ¯\\\_(ツ)_/¯ V1.1 \r\r"
 echo ""
 echo "You are going to install the dbp-brewer for the following system!"
 array=$( system_profiler SPSoftwareDataType )
@@ -26,10 +26,8 @@ echo "Get and install homebrew"
 sleep 1
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
 echo 'eval $(/opt/homebrew/bin/brew shellenv)' >> /Users/$USER/.zprofile
 
-sleep 1
 brew install tree
 sleep 1
 echo $(whoami)
@@ -195,8 +193,6 @@ echo "Preparing system essentials\n"
 sleep 1
 echo "Turn on firewall\n"
 sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 1 
-
-sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup;
 
 echo -ne 'Closing installer and prepare to work\n'
 sleep 2
