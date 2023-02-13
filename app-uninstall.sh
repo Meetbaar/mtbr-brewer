@@ -1,5 +1,8 @@
 #!/bin/sh
 
+dscl . list /Users | grep -v “^_”
+
+
 if [ -z "$1" ]; then
   printf "%s\n" "Usage: uninstall /path/to/app.app"
   exit 1
