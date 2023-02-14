@@ -1,6 +1,6 @@
 #! /bin/bash
 
-echo "dbp-brewer ¯\\\_(ツ)_/¯ V1.1 \r\r"
+echo "dbp-brewer ¯\\\_(ツ)_/¯ V1.1.230214 \r\r"
 echo ""
 echo "You are going to install the dbp-brewer for the following system!"
 array=$( system_profiler SPSoftwareDataType )
@@ -84,7 +84,7 @@ fi
 echo  "Do you want to install default DBP applications $email_employee select (y/n)?"
 read answer
 
-if [ "$answer" != "${answer#[Yy]}" ] ;then
+if [ "$answer" != "${answer#[Yy]}" ] ; then
     echo "Hold your seat..! \n"
     echo -ne 'Prepare: Google Chrome, Drive, Chat, MS Remote desktop, teamviewer, Spotify and many more...\n'
     sleep 2
@@ -184,23 +184,33 @@ fi
 
 sleep 1
 
-LOGGED_USER=`stat -f%Su /dev/console` 
-sudo su $LOGGED_USER -c 'defaults delete com.apple.dock persistent-apps' 
 
-dock_item() { 
-    printf "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>%s</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>", "$1" 
-} 
+echo  "Do you want to install dockitems? select (y/n)"
+read dock_items
 
-chrome=$(dock_item /Applications/Google Docs.app) 
-docs=$(dock_item /Applications/Google Docs.app)
-sheets=$(dock_item /Applications/Google Sheets.app) 
-slides=$(dock_item /Applications/Google Slides.app) 
-drive=$(dock_item /Applications/Google Drive.app) 
-teamviewer=$(dock_item /Applications/TeamViewer.app)
-msrdp=$(dock_item /Applications/Microsoft Remote Desktop.app) 
-spotify=$(dock_item /Applications/Spotify.app)
+if [ "$dock_items" != "${dock_items#[Yy]}" ] ; then
 
-sudo su $LOGGED_USER -c "defaults write com.apple.dock persistent-apps -array-add '$chrome' '$docs' '$sheets' '$slides' '$drive' '$teamviewer' '$msrdp' '$spotify'"; killall Dock 
+	LOGGED_USER=`stat -f%Su /dev/console` 
+	sudo su $LOGGED_USER -c 'defaults delete com.apple.dock persistent-apps' 
+
+	dock_item() { 
+	    printf "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>%s</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>", "$1" 
+	} 
+
+	chrome=$(dock_item /Applications/Google Docs.app) 
+	docs=$(dock_item /Applications/Google Docs.app)
+	sheets=$(dock_item /Applications/Google Sheets.app) 
+	slides=$(dock_item /Applications/Google Slides.app) 
+	drive=$(dock_item /Applications/Google Drive.app) 
+	teamviewer=$(dock_item /Applications/TeamViewer.app)
+	msrdp=$(dock_item /Applications/Microsoft Remote Desktop.app) 
+	spotify=$(dock_item /Applications/Spotify.app)
+
+	sudo su $LOGGED_USER -c "defaults write com.apple.dock persistent-apps -array-add '$chrome' '$docs' '$sheets' '$slides' '$drive' '$teamviewer' '$msrdp' '$spotify'"; killall Dock 
+
+else
+    echo "Dont forget to add dockitems manual"
+fi
 
 echo "Preparing system essentials\n"
 sleep 1
