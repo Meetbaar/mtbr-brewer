@@ -19,15 +19,15 @@ function printerExists()
 
 
 # Printer Name cannot Include any spaces
-prName="formalName"
+prName="Canon DX 527i"
 # User friendly printer name"
-prDescription="Printer Name"
+prDescription="Canon DX 527i (Printruimte)"
 # Location
-prLocation="Home Office"
+prLocation="Canon DX 527i (Printruimte Breda)"
 # IP Address of printer
-prAddress="192.168.1.99"
+prAddress="192.168.0.28"
 # PPD Filename... assumes it is installed on machine
-prPPD="HP LaserJet 2200.gz"
+prPPD="CNADV527X1.PPD.gz"
 
 #Test If Printer is already installed
 printerExists $prName
