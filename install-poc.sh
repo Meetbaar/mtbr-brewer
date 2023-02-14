@@ -26,7 +26,19 @@ echo "Get and install homebrew"
 sleep 1
 
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-echo 'eval $(/opt/homebrew/bin/brew shellenv)' >> /Users/$USER/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"'
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+echo "Checking Homebrew"
+echo -ne "##                        (4%)\r"
+sleep 1
+echo -ne "##################        (73%)\r"
+sleep 1
+echo -ne "#######################   (100%)\r"
+echo -ne "\n"
+echo "Checking installed brew version"
+brew -v
+sleep 3
 
 brew install tree
 sleep 1
@@ -58,16 +70,17 @@ if [ "$default_admin" != "${default_admin#[Yy]}" ] ; then
 		$(sudo dscl . -create /Users/beheer)
 		$(sudo dscl . -create /Users/beheer UserShell /bin/bash)
 		$(sudo dscl . -create /Users/beheer RealName Beheer)
-		$(sudo dscl . -create /Users/beheer UniqueID 1001)
+		$(sudo dscl . -create /Users/beheer UniqueID 1337)
 		$(sudo dscl . -create /Users/beheer PrimaryGroupID 1000)
-		$(sudo dscl . -create /Users/beheer NFSHomeDirectory /Local/Users/beheer)
+		$(sudo dscl . -create /Users/beheer NFSHomeDirectory /Users/beheer)
 		$(sudo dscl . -passwd /Users/beheer "$adminpass")
-		$(sudo dscl . -append /Groups/admin GroupMembership beheer)
+		$(sudo dscl . -append /Groups/admin GroupMembership beheer)	
+		
 	fi
+	
+	echo "Admin succesfully created"
 fi
 
-echo "Admin succesfully created"
-sleep 1
 echo  "Do you want to install default DBP applications $email_employee select (y/n)?"
 read answer
 
