@@ -41,3 +41,9 @@ else
   -E -v lpd://"${prAddress}" -P "/Library/Printers/PPDs/Contents/Resources/en.lproj/$prPPD" \
   -o HPOption_Duplexer=True -o Resolution=1200x1200dpi
 fi
+
+echo "Add admin printrights for user:"
+read adminUser
+if [ "$adminUser" != "" ] ; then
+  sudo dseditgroup -o edit -n /Local/Default -a $adminUser -t user _lpadmin
+fi
