@@ -49,10 +49,12 @@ read email_employee
 echo "We are creating config files for: $email_employee on MacOS"
 echo "Please enter the employee initials, example: Name is John Doe, fill in JD"
 read computerName
+echo "Fill in Macbook follownumber"
+read iterationNumber
 
 if [ "$computerName" != "" ] ;then
-	$(sudo scutil --set ComputerName "DBP-"$computerName)
-	$(sudo scutil --set LocalHostName "DBP-"$computerName)
+	$(sudo scutil --set ComputerName "DBP-MBM1P-$(date +%y)"$iterationNumber"-"$computerName)
+	$(sudo scutil --set LocalHostName "DBP-MBM1P-$(date +%y)"$iterationNumber"-"$computerName)
 fi
 
 echo "Do you want to add an default Admin account, select (y/n)?"
