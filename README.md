@@ -1,14 +1,14 @@
-# dbp-brewer ¯\\\_(ツ)_/¯
+# mtbr-brewer ¯\\\_(ツ)_/¯
 
 ![Build passing](https://img.shields.io/badge/Build-pass-brightgreen)
 ![Platform](https://img.shields.io/badge/Platform-MacOs-lightgrey)
 
 
-dbp-brewer is a Proof of concept for slingle line clean installer script for new MacOS nodes
+mtbr-brewer is a Proof of concept for slingle line clean installer script for new MacOS nodes
 
 
 
-#how to use the dbp brewer
+#how to use the mtbr brewer
 
 
 # tl;dr;
