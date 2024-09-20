@@ -15,11 +15,11 @@ mtbr-brewer is a Proof of concept for slingle line clean installer script for ne
 
 Get the latest version of the script and run the install
 
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/YloXx/dbp-brewer/main/install-poc.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/YloXx/mtbr-brewer/main/install-poc.sh)"
 
 Delete zoom
 
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/YloXx/dbp-brewer/main/uninstallers/remove-zoom.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/YloXx/mtbr-brewer/main/uninstallers/remove-zoom.sh)"
     
 Enter the credentials for the new user and have fun!
 
