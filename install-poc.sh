@@ -128,7 +128,6 @@ if [ "$dock_items" != "${dock_items#[Yy]}" ] ; then
 	slides=$(dock_item /Applications/Google Slides.app) 
 	drive=$(dock_item /Applications/Google Drive.app) 
 	teamviewer=$(dock_item /Applications/TeamViewer.app)
-	msrdp=$(dock_item /Applications/Microsoft Remote Desktop.app) 
 	spotify=$(dock_item /Applications/Spotify.app)
 
 	sudo su $LOGGED_USER -c "defaults write com.apple.dock persistent-apps -array-add '$chrome' '$docs' '$sheets' '$slides' '$drive' '$teamviewer' '$msrdp' '$spotify'"; killall Dock 
