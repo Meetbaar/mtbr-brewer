@@ -130,7 +130,7 @@ if [ "$dock_items" != "${dock_items#[Yy]}" ] ; then
 	teamviewer=$(dock_item /Applications/TeamViewer.app)
 	spotify=$(dock_item /Applications/Spotify.app)
 
-	sudo su $LOGGED_USER -c "defaults write com.apple.dock persistent-apps -array-add '$chrome' '$docs' '$sheets' '$slides' '$drive' '$teamviewer' '$msrdp' '$spotify'"; killall Dock 
+	sudo su $LOGGED_USER -c "defaults write com.apple.dock persistent-apps -array-add '$chrome' '$docs' '$sheets' '$slides' '$drive' '$teamviewer' '$spotify'"; killall Dock 
 
 else
     echo "Dont forget to add dockitems manual"
