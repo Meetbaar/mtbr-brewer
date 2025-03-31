@@ -9,7 +9,6 @@
 perform_rollback() {
   echo "[ROLLBACK] Herstellen van systeem naar pre-installatiestatus..."
 
-  # Verwijder gebruikers als aangemaakt
   if id "$adminUsername" &>/dev/null; then
     sudo dscl . -delete /Users/$adminUsername
     echo "[ROLLBACK] Adminaccount '$adminUsername' verwijderd."
@@ -20,24 +19,20 @@ perform_rollback() {
     echo "[ROLLBACK] Gebruiker '$newUsername' verwijderd."
   fi
 
-  # Herstel computernaam
   sudo scutil --set ComputerName "Macintosh"
   sudo scutil --set LocalHostName "Macintosh"
   echo "[ROLLBACK] Computernaam hersteld."
 
-  # Verwijder Homebrew (optioneel)
   if [[ -d "/opt/homebrew" ]]; then
     echo "[ROLLBACK] Homebrew verwijderen..."
     sudo rm -rf /opt/homebrew
   fi
 
-  # Verwijder wallpaper indien ingesteld
   if [[ -f "/Library/Desktop Pictures/company-wallpaper.jpg" ]]; then
     sudo rm "/Library/Desktop Pictures/company-wallpaper.jpg"
     echo "[ROLLBACK] Wallpaper verwijderd."
   fi
 
-  # Dock resetten
   dockutil --remove all --no-restart
   killall Dock
 
@@ -45,18 +40,20 @@ perform_rollback() {
   exit 0
 }
 
-# === Optie voor rollback aanbieden ===
 if [[ "$1" == "--rollback" ]]; then
   perform_rollback
 fi
 
-# ----------------------
-# Grantly Mac Setup Script v3
-# Voor Mac Installs M4 staging & onboarding
-# ----------------------
+# Bash als standaard shell instellen indien nodig
+if [[ "$SHELL" != "/bin/bash" ]]; then
+  echo "[INFO] Bash wordt ingesteld als standaard shell."
+  chsh -s /bin/bash
+fi
+
+# === Verder met setup ===
 clear
 CYAN='\033[1;36m'
-NC='\033[0m' # Geen kleur
+NC='\033[0m'
 
 ascii_art='
          _              _           _                   _           _            _    _        _   
@@ -80,13 +77,7 @@ while IFS= read -r line; do
     printf "${CYAN}%s${NC}\n" "$line"
 done <<< "$ascii_art"
 
-array=$( system_profiler SPSoftwareDataType )
-
-for i in "${array[@]}"; do
-    echo "- $i"
-done
-
-#SysPref close ===
+# === System Preferences afsluiten ===
 osascript -e 'try
 tell application "System Preferences" to quit
 end try
@@ -110,7 +101,7 @@ if [[ "$createAdmin" == "y" ]]; then
     adminUID=$(get_next_uid)
     sudo dscl . -create /Groups/$adminGroup
     sudo dscl . -create /Users/$adminUsername
-    sudo dscl . -create /Users/$adminUsername UserShell /bin/zsh
+    sudo dscl . -create /Users/$adminUsername UserShell /bin/bash
     sudo dscl . -create /Users/$adminUsername RealName "$adminUsername"
     sudo dscl . -create /Users/$adminUsername UniqueID "$adminUID"
     sudo dscl . -create /Users/$adminUsername PrimaryGroupID "80"
@@ -129,7 +120,7 @@ if [[ "$createUser" == "y" ]]; then
 
     userUID=$(get_next_uid)
     sudo dscl . -create /Users/$newUsername
-    sudo dscl . -create /Users/$newUsername UserShell /bin/zsh
+    sudo dscl . -create /Users/$newUsername UserShell /bin/bash
     sudo dscl . -create /Users/$newUsername RealName "$newUsername"
     sudo dscl . -create /Users/$newUsername UniqueID "$userUID"
     sudo dscl . -create /Users/$newUsername PrimaryGroupID "20"
@@ -192,9 +183,11 @@ echo "[DONE] Computernaam ingesteld als $computerName"
 
 # === Homebrew installeren ===
 echo "Homebrew installatie..."
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+echo 'eval "$\(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
+
+export PATH="/opt/homebrew/bin:$PATH"
 
 sudo dseditgroup -o create brewadmin
 sudo dseditgroup -o edit -a $adminUsername -t user brewadmin
@@ -210,13 +203,14 @@ echo "[DONE] Homebrew is klaar."
 echo "Wallpaper downloaden..."
 
 case $companyInput in
-    a) wallpaperURL="https://www.grantly.nl/public-img/wall/GRANTLY-macwallpaper.jpg" ;;
-    b) wallpaperURL="https://www.grantly.nl/public-img/wall/HSL-macwallpaper.jpg" ;;
-    c) wallpaperURL="https://www.grantly.nl/public-img/wall/PWRS-macwallpaper.jpg" ;;
-    d) wallpaperURL="https://www.grantly.nl/public-img/wall/GRANTLY-macwallpaper.jpg" ;;
+    a) wallpaperURL="https://bedrijf.com/assets/wallpapers/grantly.jpg" ;;
+    b) wallpaperURL="https://bedrijf.com/assets/wallpapers/hsl.jpg" ;;
+    c) wallpaperURL="https://bedrijf.com/assets/wallpapers/pwrstaff.jpg" ;;
+    d) wallpaperURL="https://bedrijf.com/assets/wallpapers/meetbaar.jpg" ;;
 esac
 
 wallpaperPath="/Library/Desktop Pictures/company-wallpaper.jpg"
+sudo mkdir -p "/Library/Desktop Pictures"
 curl -L "$wallpaperURL" -o /tmp/company-wallpaper.jpg
 sudo cp /tmp/company-wallpaper.jpg "$wallpaperPath"
 osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"$wallpaperPath\""
@@ -225,16 +219,21 @@ rm /tmp/company-wallpaper.jpg
 # === Conditional software install ===
 echo "Installaties voor $UserType"
 
-brew install dockutil
-dockutil --remove all --no-restart
+brew install dockutil || echo "[WAARSCHUWING] dockutil kon niet worden geïnstalleerd."
+
+if command -v dockutil &> /dev/null; then
+  dockutil --remove all --no-restart
+fi
 
 if [[ "$UserType" == "Developer" ]]; then
     brew install git node python docker docker-compose gh wget
     brew install --cask google-chrome google-drive google-chat filezilla spotify visual-studio-code postman
 
-    dockutil --add "/Applications/Google Chrome.app" --no-restart
-    dockutil --add "/Applications/Visual Studio Code.app" --no-restart
-    dockutil --add "/System/Applications/Terminal.app" --no-restart
+    if command -v dockutil &> /dev/null; then
+      dockutil --add "/Applications/Google Chrome.app" --no-restart
+      dockutil --add "/Applications/Visual Studio Code.app" --no-restart
+      dockutil --add "/System/Applications/Terminal.app" --no-restart
+    fi
 
     if command -v code &> /dev/null; then
       code --install-extension esbenp.prettier-vscode
@@ -247,23 +246,29 @@ elif [[ "$UserType" == "Server" ]]; then
     brew install nginx docker docker-compose redis postgresql
     brew install --cask iterm2
 
-    dockutil --add "/System/Applications/Utilities/Activity Monitor.app" --no-restart
-    dockutil --add "/Applications/iTerm.app" --no-restart
-    dockutil --add "/System/Applications/Terminal.app" --no-restart
+    if command -v dockutil &> /dev/null; then
+      dockutil --add "/System/Applications/Utilities/Activity Monitor.app" --no-restart
+      dockutil --add "/Applications/iTerm.app" --no-restart
+      dockutil --add "/System/Applications/Terminal.app" --no-restart
+    fi
 
 elif [[ "$UserType" == "Overige medewerker" ]]; then
     brew install --cask google-chrome 
 
-    dockutil --add "/Applications/Google Chrome.app" --no-restart
-    dockutil --add "/System/Applications/Mail.app" --no-restart
-    dockutil --add "/System/Applications/Notes.app" --no-restart
-    dockutil --add "/Applications/Slack.app" --no-restart
+    if command -v dockutil &> /dev/null; then
+      dockutil --add "/Applications/Google Chrome.app" --no-restart
+      dockutil --add "/System/Applications/Mail.app" --no-restart
+      dockutil --add "/System/Applications/Notes.app" --no-restart
+      dockutil --add "/Applications/Slack.app" --no-restart
+    fi
 fi
 
-if [[ "$USER" == "$newUsername" ]]; then
+if [[ "$USER" == "$newUsername" && $(command -v dockutil) ]]; then
   killall Dock
 fi
 
 echo "[OK] Setup voltooid voor $UserType op $computerName"
 echo "--------------------------------------------"
+
+
 
