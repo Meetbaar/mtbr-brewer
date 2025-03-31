@@ -19,13 +19,13 @@ function printerExists()
 
 
 # Printer Name cannot Include any spaces
-prName="Canon DX 527i"
+prName="EPSON WF 4825"
 # User friendly printer name"
-prDescription="Canon DX 527i (Printruimte)"
+prDescription="EPSON Printer(main)"
 # Location
-prLocation="Canon DX 527i (Printruimte Breda)"
+prLocation="EPSON WF 4825 (Eindhoven)"
 # IP Address of printer
-prAddress="192.168.0.28"
+prAddress="10.0.0.1"
 # PPD Filename... assumes it is installed on machine
 prPPD="CNADV527X1.PPD.gz"
 
