@@ -15,11 +15,11 @@ grntly-brewer is a Proof of concept for slingle line clean installer script for 
 
 Get the latest version of the script and run the install
 
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/YloXx/mtbr-brewer/main/install-poc.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/grntly/grntly-brewer/refs/heads/main/mac_setup.sh)"
 
 Delete zoom
 
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/YloXx/mtbr-brewer/main/uninstallers/remove-zoom.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/grntly/grntly-brewer/refs/heads/main/uninstallers/remove-zoom.sh)"
     
 Enter the credentials for the new user and have fun!
 
