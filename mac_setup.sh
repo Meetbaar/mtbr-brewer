@@ -203,10 +203,10 @@ echo "[DONE] Homebrew is klaar."
 echo "Wallpaper downloaden..."
 
 case $companyInput in
-    a) wallpaperURL="https://bedrijf.com/assets/wallpapers/grantly.jpg" ;;
-    b) wallpaperURL="https://bedrijf.com/assets/wallpapers/hsl.jpg" ;;
-    c) wallpaperURL="https://bedrijf.com/assets/wallpapers/pwrstaff.jpg" ;;
-    d) wallpaperURL="https://bedrijf.com/assets/wallpapers/meetbaar.jpg" ;;
+    a) wallpaperURL="https://www.grantly.nl/public-img/wall/GRANTLY-macwallpaper.jpg" ;;
+    b) wallpaperURL="https://www.grantly.nl/public-img/wall/HSL-macwallpaper.jpg" ;;
+    c) wallpaperURL="https://www.grantly.nl/public-img/wall/PWRS-macwallpaper.jpg" ;;
+    d) wallpaperURL="https://www.grantly.nl/public-img/wall/GRANTLY-macwallpaper.jpg" ;;
 esac
 
 wallpaperPath="/Library/Desktop Pictures/company-wallpaper.jpg"
