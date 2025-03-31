@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------
-# Grantly Mac Setup Script v3
+# Grantly Mac Setup Script v4
 # Voor Mac Installs M4 staging & onboarding (inclusief rollback optie)
 # ----------------------
 
