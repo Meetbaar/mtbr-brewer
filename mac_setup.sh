@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------
-# Grantly Mac Setup Script v4
+# Grantly Mac Setup Script v4.2
 # Voor Mac Installs M4 staging & onboarding (inclusief rollback optie)
 # ----------------------
 
@@ -189,18 +189,24 @@ echo 'eval "$\(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
 
 export PATH="/opt/homebrew/bin:$PATH"
 
+brew update --force --quiet
+
 sudo dseditgroup -o create brewadmin
 sudo dseditgroup -o edit -a $adminUsername -t user brewadmin
 sudo chown -R root:brewadmin /opt/homebrew
 sudo chmod -R 770 /opt/homebrew
 
 brew analytics off
-brew update && brew upgrade && brew doctor
+brew update
+brew upgrade
+sleep 2
+brew doctor
+sleep 2
 
 echo "[DONE] Homebrew is klaar."
 
 # === Wallpaper instellen ===
-echo "Wallpaper downloaden..."
+echo "Wallpapers downloaden..."
 
 case $companyInput in
     a) wallpaperURL="https://www.grantly.nl/public-img/wall/GRANTLY-macwallpaper.jpg" ;;
@@ -211,11 +217,17 @@ esac
 
 wallpaperPath="/Library/Desktop Pictures/company-wallpaper.jpg"
 sudo mkdir -p "/Library/Desktop Pictures"
-curl -L "$wallpaperURL" -o /tmp/company-wallpaper.jpg
-sudo cp /tmp/company-wallpaper.jpg "$wallpaperPath"
-osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"$wallpaperPath\""
-rm /tmp/company-wallpaper.jpg
 
+if curl -L "$wallpaperURL" -o /tmp/company-wallpaper.jpg; then
+  sudo cp /tmp/company-wallpaper.jpg "$wallpaperPath"
+  osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"$wallpaperPath\""
+  rm /tmp/company-wallpaper.jpg
+else
+  echo "[ERROR] Wallpaper downloaden mislukt voor $companyInput"
+fi
+
+echo "[DONE] Wallpaper gedownload en geinstalleerd."
+sleep 2
 # === Conditional software install ===
 echo "Installaties voor $UserType"
 
@@ -226,7 +238,7 @@ if command -v dockutil &> /dev/null; then
 fi
 
 if [[ "$UserType" == "Developer" ]]; then
-    brew install git node python docker docker-compose gh wget
+    brew install docker docker-compose gh wget curl php
     brew install --cask google-chrome google-drive google-chat filezilla spotify visual-studio-code postman
 
     if command -v dockutil &> /dev/null; then
