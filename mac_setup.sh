@@ -184,10 +184,15 @@ echo "[DONE] Computernaam ingesteld als $computerName"
 # === Homebrew installeren ===
 echo "Homebrew installatie..."
 NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-eval "$(/opt/homebrew/bin/brew shellenv)"
-echo 'eval "$\(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
 
-export PATH="/opt/homebrew/bin:$PATH"
+if [ -f /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  export PATH="/opt/homebrew/bin:$PATH"
+  grep -q 'brew shellenv' ~/.bash_profile || echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
+else
+  echo "[FOUT] Homebrew installatie lijkt mislukt. Pad niet gevonden."
+  exit 1
+fi
 
 brew update --force --quiet
 
