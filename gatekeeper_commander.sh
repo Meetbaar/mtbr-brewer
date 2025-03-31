@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 #Attribute
-GITHUB_URL=https://github.com/YloXx/dbp-brewer
+GITHUB_URL=https://github.com/YloXx/grntly-brewer
 RELEASE_VERSION="v1.0"
 ROOT_PASSWORD=0
 
