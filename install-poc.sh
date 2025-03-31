@@ -1,8 +1,8 @@
 #! /bin/bash
 
-echo "mtbr-brewer ¯\\\_(ツ)_/¯ V1.1.230214 \r\r"
+echo "grntly-brewer ¯\\\_(ツ)_/¯ Alpha V0.1.1.25 \r\r"
 echo ""
-echo "You are going to install the mtbr-brewer for the following system!"
+echo "You are going to install the grntly-brewer for the following system!"
 array=$( system_profiler SPSoftwareDataType )
 
 for i in "${array[@]}"; do
