@@ -1,10 +1,10 @@
-# mtbr-brewer ¯\\\_(ツ)_/¯
+# grntly-brewer ¯\\\_(ツ)_/¯
 
 ![Build passing](https://img.shields.io/badge/Build-pass-brightgreen)
 ![Platform](https://img.shields.io/badge/Platform-MacOs-lightgrey)
 
 
-mtbr-brewer is a Proof of concept for slingle line clean installer script for new MacOS nodes
+grntly-brewer is a Proof of concept for slingle line clean installer script for new MacOS nodes
 
 
 
