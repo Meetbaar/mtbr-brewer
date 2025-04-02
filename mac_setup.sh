@@ -23,10 +23,11 @@ perform_rollback() {
   sudo scutil --set LocalHostName "Macintosh"
   echo "[ROLLBACK] Computernaam hersteld."
 
-  if [[ -d "/opt/homebrew" ]]; then
-    echo "[ROLLBACK] Homebrew verwijderen..."
-    sudo rm -rf /opt/homebrew
-  fi
+if [[ -d "/usr/local/homebrew" ]]; then
+  echo "[ROLLBACK] Homebrew verwijderen..."
+  sudo rm -rf /usr/local/homebrew
+fi
+
 
   if [[ -f "/Library/Desktop Pictures/company-wallpaper.jpg" ]]; then
     sudo rm "/Library/Desktop Pictures/company-wallpaper.jpg"
@@ -185,13 +186,14 @@ echo "[DONE] Computernaam ingesteld als $computerName"
 echo "Homebrew installatie..."
 if ! command -v brew &>/dev/null; then
     echo "[INFO] Homebrew wordt geïnstalleerd..."
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  export HOMEBREW_PREFIX="/usr/local/homebrew"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
     echo "[INFO] Homebrew is al geïnstalleerd."
 fi
 
 # Zorg ervoor dat Homebrew goed is ingesteld
-eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(/usr/local/homebrew/bin/brew shellenv)"
 
 # Maak Homebrew directory toegankelijk voor de juiste gebruiker
 sudo chown -R $(whoami) /opt/homebrew
