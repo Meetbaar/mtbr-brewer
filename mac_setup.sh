@@ -255,6 +255,7 @@ if [[ "$UserType" == "Developer" ]]; then
     brew install --cask google-chrome google-drive google-chat filezilla spotify visual-studio-code postman
 
     if command -v dockutil &> /dev/null; then
+      dockutil --add "/Applications/Google Chrome.app" --no-restart
       dockutil --add "/Applications/Visual Studio Code.app" --no-restart
       dockutil --add "/System/Applications/Terminal.app" --no-restart
     fi
