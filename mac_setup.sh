@@ -274,16 +274,29 @@ if [[ "$UserType" == "Developer" ]]; then
     install_or_notify_cask google-chrome
     install_or_notify_cask google-drive
     install_or_notify_cask google-chat
-    install_or_notify_cask filezilla
     install_or_notify_cask spotify
     install_or_notify_cask visual-studio-code
     install_or_notify_cask postman
 
-    if command -v dockutil &> /dev/null; then
-      dockutil --add "/Applications/Google Chrome.app" --no-restart
-      dockutil --add "/Applications/Visual Studio Code.app" --no-restart
-      dockutil --add "/System/Applications/Terminal.app" --no-restart
+  if command -v dockutil &> /dev/null; then
+    echo "dockutil is geïnstalleerd, applicaties worden toegevoegd aan het Dock..."
+    
+    if ! dockutil --add "/Applications/Google Chrome.app" --no-restart; then
+        echo "Fout: Kon Google Chrome niet toevoegen aan het Dock."
     fi
+
+    if ! dockutil --add "/Applications/Visual Studio Code.app" --no-restart; then
+        echo "Fout: Kon Visual Studio Code niet toevoegen aan het Dock."
+    fi
+
+    if ! dockutil --add "/System/Applications/Terminal.app" --no-restart; then
+        echo "Fout: Kon Terminal niet toevoegen aan het Dock."
+    fi
+else
+    echo "Fout: dockutil is niet geïnstalleerd. Installeer het eerst voordat je dit script uitvoert."
+    exit 1
+fi
+
 
     if command -v code &> /dev/null; then
       code --install-extension esbenp.prettier-vscode
