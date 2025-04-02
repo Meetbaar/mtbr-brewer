@@ -210,8 +210,8 @@ sudo chown -R $adminUsername:admin /opt/homebrew
 sudo chmod -R 775 /opt/homebrew
 
 brew analytics off
-brew update
 brew upgrade
+brew update
 sleep 2
 brew doctor
 sleep 2
