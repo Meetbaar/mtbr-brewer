@@ -2,7 +2,7 @@
 
 # ----------------------
 # Grantly Mac Setup Script v4.2
-# Voor Mac Installs M4 staging & onboarding (inclusief rollback optie) nieuws
+# Voor Mac Installs M4 staging & onboarding (inclusief rollback optie) s
 # ----------------------
 
 # === Functie: Rollback uitvoeren ===
@@ -23,9 +23,9 @@ perform_rollback() {
   sudo scutil --set LocalHostName "Macintosh"
   echo "[ROLLBACK] Computernaam hersteld."
 
-  if [[ -d "/usr/local/homebrew" ]]; then
+  if [[ -d "/opt/homebrew" ]]; then
     echo "[ROLLBACK] Homebrew verwijderen..."
-    sudo rm -rf /usr/local/homebrew
+    sudo rm -rf /opt/homebrew
   fi
 
   if [[ -f "/Library/Desktop Pictures/company-wallpaper.jpg" ]]; then
@@ -44,7 +44,7 @@ if [[ "$1" == "--rollback" ]]; then
   perform_rollback
 fi
 
-# === Bash als standaard shell instellen indien nodig ===
+# Bash als standaard shell instellen indien nodig
 if [[ "$SHELL" != "/bin/bash" ]]; then
   echo "[INFO] Bash wordt ingesteld als standaard shell."
   chsh -s /bin/bash
@@ -64,8 +64,8 @@ ascii_art='
     / / / ______   / / /_/ / / / / /  \ \ \        / / /  \/____// / /\ \ \ / / /       \ \ \_/    
    / / / /\_____\ / / /__\/ / / / /___/ /\ \      / / /    / / // / /  \/_// / /         \ \ \     
   / / /  \/____ // / /_____/ / / /_____/ /\ \    / / /    / / // / /      / / / ____      \ \ \    
- / / /_____/ / // / /\ \ \  / /_________/\ \ \  / / /    / / //_/ /      /_______/\__\/      \ \_\  
-/ / /______\/ // / /  \ \ \/ / /_       __\ \_\/ / /    / / // / /      / /_/_/ ___/\     \ \ \   
+ / / /_____/ / // / /\ \ \  / /_________/\ \ \  / / /    / / // / /      / /_/_/ ___/\     \ \ \   
+/ / /______\/ // / /  \ \ \/ / /_       __\ \_\/ / /    / / //_/ /      /_______/\__\/      \ \_\  
 \/___________/ \/_/    \_\/\_\___\     /____/_/\/_/     \/_/ \_\/       \_______\/           \/_/  
 '
 
@@ -183,39 +183,63 @@ echo "[DONE] Computernaam ingesteld als $computerName"
 
 # === Homebrew installeren ===
 echo "Homebrew installatie..."
-if ! command -v brew &>/dev/null; then
-    echo "[INFO] Homebrew wordt geïnstalleerd..."
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+if [ -f /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  export PATH="/opt/homebrew/bin:$PATH"
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc  # Toegevoegd voor Zsh
 else
-    echo "[INFO] Homebrew is al geïnstalleerd."
+  echo "[FOUT] Homebrew installatie lijkt mislukt. Pad niet gevonden."
+  exit 1
 fi
 
-# Geef de juiste permissies aan de Homebrew-directory
-if [[ -d "/opt/homebrew" ]]; then
-  sudo chown -R $(whoami) /opt/homebrew
-  sudo chmod -R 755 /opt/homebrew
+brew update --force --quiet
+
+sudo chown -R $adminUsername:admin /opt/homebrew
+sudo chmod -R 775 /opt/homebrew
+
+brew analytics off
+brew update
+brew upgrade
+sleep 2
+brew doctor
+sleep 2
+
+echo "[DONE] Homebrew is klaar."
+
+# === Wallpaper instellen ===
+echo "Wallpapers downloaden..."
+
+case $companyInput in
+    a) wallpaperURL="https://www.grantly.nl/public-img/wall/GRANTLY-macwallpaper.jpg" ;;
+    b) wallpaperURL="https://www.grantly.nl/public-img/wall/HSL-macwallpaper.jpg" ;;
+    c) wallpaperURL="https://www.grantly.nl/public-img/wall/PWRS-macwallpaper.jpg" ;;
+    d) wallpaperURL="https://www.grantly.nl/public-img/wall/GRANTLY-macwallpaper.jpg" ;;
+esac
+
+wallpaperPath="/Library/Desktop Pictures/company-wallpaper.jpg"
+sudo mkdir -p "/Library/Desktop Pictures"
+
+if curl -L "$wallpaperURL" -o /tmp/company-wallpaper.jpg; then
+  sudo cp /tmp/company-wallpaper.jpg "$wallpaperPath"
+  osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"$wallpaperPath\""
+  rm /tmp/company-wallpaper.jpg
+else
+  echo "[ERROR] Wallpaper downloaden mislukt voor $companyInput"
 fi
 
-# Zorg ervoor dat Homebrew geïnstalleerd is in het systeem
-export PATH="/opt/homebrew/bin:$PATH"
-echo "Homebrew installatie voltooid."
-
-# Voeg gewenste programma's toe via Homebrew en Cask
-echo "Installeer FileZilla via Homebrew..."
-brew install --cask filezilla
-
-echo "Installeer andere programma's via Homebrew..."
-brew install --cask google-chrome visual-studio-code slack
-
-# === Dock aanpassen ===
-dockutil --add /Applications/Google\ Chrome.app --no-restart
-dockutil --add /Applications/Visual\ Studio\ Code.app --no-restart
-dockutil --add /Applications/Slack.app --no-restart
-killall Dock
-
+echo "[DONE] Wallpaper gedownload en geinstalleerd."
+sleep 2
+# === Conditional software install ===
 echo "Installaties voor $UserType"
 
-# Developer instellingen
+if ! command -v dockutil &> /dev/null; then
+    echo "dockutil wordt geïnstalleerd..."
+    brew install dockutil || echo "[WAARSCHUWING] dockutil installatie mislukt!"
+fi
+
 if [[ "$UserType" == "Developer" ]]; then
     brew install docker docker-compose gh wget curl php
     brew install --cask google-chrome google-drive google-chat filezilla spotify visual-studio-code postman
@@ -233,7 +257,6 @@ if [[ "$UserType" == "Developer" ]]; then
       code --install-extension github.copilot
     fi
 
-# Server instellingen
 elif [[ "$UserType" == "Server" ]]; then
     brew install nginx docker docker-compose redis postgresql
     brew install --cask iterm2
@@ -244,7 +267,6 @@ elif [[ "$UserType" == "Server" ]]; then
       dockutil --add "/System/Applications/Terminal.app" --no-restart
     fi
 
-# Overige medewerker instellingen
 elif [[ "$UserType" == "Overige medewerker" ]]; then
     brew install --cask google-chrome 
 
@@ -256,10 +278,12 @@ elif [[ "$UserType" == "Overige medewerker" ]]; then
     fi
 fi
 
-# Als dockutil aanwezig is en de gebruiker hetzelfde is als het aangemaakte account
 if [[ "$USER" == "$newUsername" && $(command -v dockutil) ]]; then
   killall Dock
 fi
 
 echo "[OK] Setup voltooid voor $UserType op $computerName"
 echo "--------------------------------------------"
+
+
+
