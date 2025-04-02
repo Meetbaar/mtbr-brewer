@@ -295,9 +295,12 @@ fi
      # Voeg applicaties toe aan de Dock, maar verberg eventuele foutmeldingen
      dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
-     dockutil --add "/Applications/Gmail.app" --replacing "Gmail" --no-restart 2>/dev/null
+     dockutil --add "/Applications/Google chat.app" --replacing "google chat" --no-restart 2>/dev/null
      dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
      dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
+     dockutil --add "/Applications/Google docs.app" --replacing "Google docs" --no-restart 2>/dev/null
+     dockutil --add "/Applications/Google sheets.app" --replacing "Google sheets" --no-restart 2>/dev/null
+     dockutil --add "/Applications/Google Slides.app" --replacing "Google slides" --no-restart 2>/dev/null
      # Herstart het Dock, maar verberg eventuele foutmeldingen
      killall Dock 2>/dev/null
  else
