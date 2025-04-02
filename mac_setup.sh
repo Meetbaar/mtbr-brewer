@@ -1,4 +1,4 @@
-@ -1,290 +1,293 @@
+
 #!/bin/bash
 
 # ----------------------
@@ -190,14 +190,22 @@ if [ -f /opt/homebrew/bin/brew ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
   export PATH="/opt/homebrew/bin:$PATH"
   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc  # Toegevoegd voor Zsh
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc  
 else
   echo "[FOUT] Homebrew installatie lijkt mislukt. Pad niet gevonden."
   exit 1
 fi
 
-brew update --force --quiet
+# Even wachten om ervoor te zorgen dat alles correct is ingesteld
+sleep 5
 
+# Test of brew correct werkt
+if ! command -v brew &> /dev/null; then
+  echo "[FOUT] Homebrew werkt niet correct. Controleer de installatie."
+  exit 1
+fi
+
+brew update --force --quiet
 sudo chown -R $adminUsername:admin /opt/homebrew
 sudo chmod -R 775 /opt/homebrew
 
@@ -233,14 +241,14 @@ fi
 
 echo "[DONE] Wallpaper gedownload en geinstalleerd."
 sleep 2
-# === Conditional software install ===
-echo "Installaties voor $UserType"
 
-sudo -u $adminUsername brew install dockutil || echo "[WAARSCHUWING] dockutil kon niet worden geïnstalleerd."
 
-if command -v dockutil &> /dev/null; then
-  dockutil --remove all --no-restart
-fi
+
+# === Software installeren ===
+eval "$(/opt/homebrew/bin/brew shellenv)"  # Zorgt ervoor dat brew correct werkt
+
+
+
 
 if [[ "$UserType" == "Developer" ]]; then
     brew install docker docker-compose gh wget curl php
@@ -286,5 +294,6 @@ fi
 
 echo "[OK] Setup voltooid voor $UserType op $computerName"
 echo "--------------------------------------------"
+
 
 
