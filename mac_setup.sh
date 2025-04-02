@@ -278,14 +278,25 @@ if [[ "$UserType" == "Developer" ]]; then
     install_or_notify_cask visual-studio-code
     install_or_notify_cask postman
 
+handle_error() {
+  echo "[ERROR] Er is een fout opgetreden bij het uitvoeren van $1."
+  exit 1
+}
+
+# Check of dockutil is geïnstalleerd en voeg applicaties toe aan de Dock
 if command -v dockutil &> /dev/null; then
-    dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart
-    dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart
-    dockutil --add "/System/Applications/Terminal.app" --replacing "Terminal" --no-restart
-    killall Dock # Herstart het Dock om de wijzigingen door te voeren
+    echo "[INFO] Dockutil geïnstalleerd. Wijzigingen in Dock toepassen..."
+    
+    dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart || handle_error "Google Chrome toevoegen aan Dock"
+    dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart || handle_error "Visual Studio Code toevoegen aan Dock"
+    dockutil --add "/System/Applications/Terminal.app" --replacing "Terminal" --no-restart || handle_error "Terminal toevoegen aan Dock"
+    
+    killall Dock || handle_error "Dock opnieuw starten"
 else
-    echo "dockutil is niet geïnstalleerd."
+    echo "[ERROR] Dockutil is niet geïnstalleerd."
+    exit 1
 fi
+
 
 
 
