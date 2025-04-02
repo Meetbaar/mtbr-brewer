@@ -197,7 +197,7 @@
    fi
  
    # Even wachten om ervoor te zorgen dat alles correct is ingesteld
-   sleep 5
+   sleep 2
  
    # Test of brew correct werkt
    if ! command -v brew &> /dev/null; then
@@ -214,7 +214,6 @@
    brew upgrade
    sleep 2
    brew doctor
-   sleep 2
  
    echo "[DONE] Homebrew is klaar."
  else
@@ -242,10 +241,9 @@
  else
    echo "[ERROR] Wallpaper downloaden mislukt voor $companyInput"
  fi
-
  
-  # === Software installeren ===
-  eval "$(/opt/homebrew/bin/brew shellenv)"  # Zorgt ervoor dat brew correct werkt
+  brew install dockutil
+  echo "[DONE] dockutil geinstaleerd"
   
   if command -v dockutil &> /dev/null; then
      echo "[INFO] Dock wordt opgeschoond..."
@@ -267,7 +265,7 @@
  install_or_notify_cask() {
    local CASK=$1
    if brew list --cask --versions "$CASK" &> /dev/null; then
-     echo "[INFO] $CASK is al geïnstalleerd."
+     echo "[DONE] $CASK is al geïnstalleerd."
    else
      brew install --cask "$CASK"
    fi
@@ -286,7 +284,7 @@
      install_or_notify_cask spotify
      install_or_notify_cask visual-studio-code
      install_or_notify_cask postman
-     install_or_notify_cask github-desktop
+     install_or_notify_cask github
  
  handle_error() {
    echo "[ERROR] Er is een fout opgetreden bij het uitvoeren van $1."
