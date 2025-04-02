@@ -10,31 +10,31 @@ perform_rollback() {
   echo "[ROLLBACK] Herstellen van systeem naar pre-installatiestatus..."
 
   if id "$adminUsername" &>/dev/null; then
-    sudo dscl . -delete /Users/$adminUsername
+    sudo dscl . -delete /Users/$adminUsername &>/dev/null
     echo "[ROLLBACK] Adminaccount '$adminUsername' verwijderd."
   fi
 
   if id "$newUsername" &>/dev/null; then
-    sudo dscl . -delete /Users/$newUsername
+    sudo dscl . -delete /Users/$newUsername &>/dev/null
     echo "[ROLLBACK] Gebruiker '$newUsername' verwijderd."
   fi
 
-  sudo scutil --set ComputerName "Macintosh"
-  sudo scutil --set LocalHostName "Macintosh"
+  sudo scutil --set ComputerName "Macintosh" &>/dev/null
+  sudo scutil --set LocalHostName "Macintosh" &>/dev/null
   echo "[ROLLBACK] Computernaam hersteld."
 
   if [[ -d "/opt/homebrew" ]]; then
     echo "[ROLLBACK] Homebrew verwijderen..."
-    sudo rm -rf /opt/homebrew
+    sudo rm -rf /opt/homebrew &>/dev/null
   fi
 
   if [[ -f "/Library/Desktop Pictures/company-wallpaper.jpg" ]]; then
-    sudo rm "/Library/Desktop Pictures/company-wallpaper.jpg"
+    sudo rm "/Library/Desktop Pictures/company-wallpaper.jpg" &>/dev/null
     echo "[ROLLBACK] Wallpaper verwijderd."
   fi
 
-  dockutil --remove all --no-restart
-  killall Dock
+  dockutil --remove all --no-restart &>/dev/null
+  killall Dock &>/dev/null
 
   echo "[ROLLBACK] Voltooid."
   exit 0
@@ -47,7 +47,7 @@ fi
 # Bash als standaard shell instellen indien nodig
 if [[ "$SHELL" != "/bin/bash" ]]; then
   echo "[INFO] Bash wordt ingesteld als standaard shell."
-  chsh -s /bin/bash
+  chsh -s /bin/bash &>/dev/null
 fi
 
 # === Verder met setup ===
@@ -83,7 +83,7 @@ tell application "System Preferences" to quit
 end try
 try
 tell application "System Settings" to quit
-end try'
+end try' &>/dev/null
 
 # === Hulpfunctie voor dynamische UniqueID ===
 get_next_uid() {
@@ -99,15 +99,15 @@ if [[ "$createAdmin" == "y" ]]; then
     echo
 
     adminUID=$(get_next_uid)
-    sudo dscl . -create /Groups/$adminGroup
-    sudo dscl . -create /Users/$adminUsername
-    sudo dscl . -create /Users/$adminUsername UserShell /bin/bash
-    sudo dscl . -create /Users/$adminUsername RealName "$adminUsername"
-    sudo dscl . -create /Users/$adminUsername UniqueID "$adminUID"
-    sudo dscl . -create /Users/$adminUsername PrimaryGroupID "80"
-    sudo dscl . -create /Users/$adminUsername NFSHomeDirectory /Users/$adminUsername
-    sudo dscl . -passwd /Users/$adminUsername "$adminPassword"
-    sudo dscl . -append /Groups/admin GroupMembership $adminUsername
+    sudo dscl . -create /Groups/$adminGroup &>/dev/null
+    sudo dscl . -create /Users/$adminUsername &>/dev/null
+    sudo dscl . -create /Users/$adminUsername UserShell /bin/bash &>/dev/null
+    sudo dscl . -create /Users/$adminUsername RealName "$adminUsername" &>/dev/null
+    sudo dscl . -create /Users/$adminUsername UniqueID "$adminUID" &>/dev/null
+    sudo dscl . -create /Users/$adminUsername PrimaryGroupID "80" &>/dev/null
+    sudo dscl . -create /Users/$adminUsername NFSHomeDirectory /Users/$adminUsername &>/dev/null
+    sudo dscl . -passwd /Users/$adminUsername "$adminPassword" &>/dev/null
+    sudo dscl . -append /Groups/admin GroupMembership $adminUsername &>/dev/null
     echo "[DONE] Adminaccount '$adminUsername' aangemaakt."
 fi
 
@@ -119,13 +119,13 @@ if [[ "$createUser" == "y" ]]; then
     echo
 
     userUID=$(get_next_uid)
-    sudo dscl . -create /Users/$newUsername
-    sudo dscl . -create /Users/$newUsername UserShell /bin/bash
-    sudo dscl . -create /Users/$newUsername RealName "$newUsername"
-    sudo dscl . -create /Users/$newUsername UniqueID "$userUID"
-    sudo dscl . -create /Users/$newUsername PrimaryGroupID "20"
-    sudo dscl . -create /Users/$newUsername NFSHomeDirectory /Users/$newUsername
-    sudo dscl . -passwd /Users/$newUsername "$newPassword"
+    sudo dscl . -create /Users/$newUsername &>/dev/null
+    sudo dscl . -create /Users/$newUsername UserShell /bin/bash &>/dev/null
+    sudo dscl . -create /Users/$newUsername RealName "$newUsername" &>/dev/null
+    sudo dscl . -create /Users/$newUsername UniqueID "$userUID" &>/dev/null
+    sudo dscl . -create /Users/$newUsername PrimaryGroupID "20" &>/dev/null
+    sudo dscl . -create /Users/$newUsername NFSHomeDirectory /Users/$newUsername &>/dev/null
+    sudo dscl . -passwd /Users/$newUsername "$newPassword" &>/dev/null
     echo "[DONE] Gebruiker '$newUsername' aangemaakt."
 fi
 
@@ -177,20 +177,20 @@ read -p "Voer initialen in (bv. JD): " UserInnitials
 read -p "Voer nummer/iteratie in (bv. 01): " iterationNumber
 
 computerName="$prefix-$ComputerType-$(date +%y)$iterationNumber-$UserInnitials"
-sudo scutil --set ComputerName "$computerName"
-sudo scutil --set LocalHostName "$computerName"
+sudo scutil --set ComputerName "$computerName" &>/dev/null
+sudo scutil --set LocalHostName "$computerName" &>/dev/null
 echo "[DONE] Computernaam ingesteld als $computerName"
 
 # === Homebrew installeren ===
 if ! command -v brew &> /dev/null; then
   echo "Homebrew installatie..."
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" &>/dev/null
 
   if [ -f /opt/homebrew/bin/brew ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+    eval "$(/opt/homebrew/bin/brew shellenv)" &>/dev/null
     export PATH="/opt/homebrew/bin:$PATH"
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc  
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile &>/dev/null
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc &>/dev/null
   else
     echo "[FOUT] Homebrew installatie lijkt mislukt. Pad niet gevonden."
     exit 1
@@ -205,15 +205,15 @@ if ! command -v brew &> /dev/null; then
     exit 1
   fi
 
-  brew update --force --quiet
-  sudo chown -R $adminUsername:admin /opt/homebrew
-  sudo chmod -R 775 /opt/homebrew
+  brew update --force --quiet &>/dev/null
+  sudo chown -R $adminUsername:admin /opt/homebrew &>/dev/null
+  sudo chmod -R 775 /opt/homebrew &>/dev/null
 
-  brew analytics off
-  brew update
-  brew upgrade
+  brew analytics off &>/dev/null
+  brew update &>/dev/null
+  brew upgrade &>/dev/null
   sleep 2
-  brew doctor
+  brew doctor &>/dev/null
   sleep 2
 
   echo "[DONE] Homebrew is klaar."
@@ -232,12 +232,12 @@ case $companyInput in
 esac
 
 wallpaperPath="/Library/Desktop Pictures/company-wallpaper.jpg"
-sudo mkdir -p "/Library/Desktop Pictures"
+sudo mkdir -p "/Library/Desktop Pictures" &>/dev/null
 
-if curl -L "$wallpaperURL" -o /tmp/company-wallpaper.jpg; then
-  sudo cp /tmp/company-wallpaper.jpg "$wallpaperPath"
-  osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"$wallpaperPath\""
-  rm /tmp/company-wallpaper.jpg
+if curl -L "$wallpaperURL" -o /tmp/company-wallpaper.jpg &>/dev/null; then
+  sudo cp /tmp/company-wallpaper.jpg "$wallpaperPath" &>/dev/null
+  osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"$wallpaperPath\"" &>/dev/null
+  rm /tmp/company-wallpaper.jpg &>/dev/null
   echo "[DONE] Wallpaper gedownload en geïnstalleerd."
 else
   echo "[ERROR] Wallpaper downloaden mislukt voor $companyInput"
@@ -251,7 +251,7 @@ install_or_notify() {
   if brew list --versions "$SOFTWARE" &> /dev/null; then
     echo "[INFO] $SOFTWARE is al geïnstalleerd."
   else
-    brew install "$SOFTWARE"
+    brew install "$SOFTWARE" &>/dev/null
   fi
 }
 
@@ -260,23 +260,24 @@ install_or_notify_cask() {
   if brew list --cask --versions "$CASK" &> /dev/null; then
     echo "[INFO] $CASK is al geïnstalleerd."
   else
-    brew install --cask "$CASK"
+    brew install --cask "$CASK" &>/dev/null
   fi
 }
 
 if [[ "$UserType" == "Developer" ]]; then
-    install_or_notify docker
-    install_or_notify docker-compose
-    install_or_notify gh
-    install_or_notify wget
-    install_or_notify curl
-    install_or_notify php
-    install_or_notify_cask google-chrome
-    install_or_notify_cask google-drive
-    install_or_notify_cask google-chat
-    install_or_notify_cask spotify
-    install_or_notify_cask visual-studio-code
-    install_or_notify_cask postman
+    install_or_notify docker &>/dev/null
+    install_or_notify docker-compose &>/dev/null
+    install_or_notify gh &>/dev/null
+    install_or_notify wget &>/dev/null
+    install_or_notify curl &>/dev/null
+    install_or_notify php &>/dev/null
+    install_or_notify_cask google-chrome &>/dev/null
+    install_or_notify_cask google-drive &>/dev/null
+    install_or_notify_cask google-chat &>/dev/null
+    install_or_notify_cask spotify &>/dev/null
+    install_or_notify_cask visual-studio-code &>/dev/null
+    install_or_notify_cask postman &>/dev/null
+fi
 
 handle_error() {
   echo "[ERROR] Er is een fout opgetreden bij het uitvoeren van $1."
@@ -287,8 +288,7 @@ handle_error() {
 if command -v dockutil &> /dev/null; then
     # Voeg applicaties toe aan de Dock, maar verberg eventuele foutmeldingen
     dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
-    dockutil --add "/Applications/spotify.app" --replacing "spotify" --no-restart 2>/dev/null
+    dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null    
     # Herstart het Dock, maar verberg eventuele foutmeldingen
     killall Dock 2>/dev/null
 else
@@ -297,40 +297,10 @@ else
 fi
 
     if command -v code &> /dev/null; then
-      code --install-extension esbenp.prettier-vscode
-      code --install-extension dbaeumer.vscode-eslint
-      code --install-extension ms-vscode.vscode-typescript-next
-      code --install-extension github.copilot
+      code --install-extension esbenp.prettier-vscode &>/dev/null
+      code --install-extension dbaeumer.vscode-eslint &>/dev/null
+      code --install-extension ms-vscode.vscode-typescript-next &>/dev/null
+      code --install-extension github.copilot &>/dev/null
     fi
 
-elif [[ "$UserType" == "Server" ]]; then
-    install_or_notify nginx
-    install_or_notify docker
-    install_or_notify docker-compose
-    install_or_notify redis
-    install_or_notify postgresql
-    install_or_notify_cask iterm2
-
-    if command -v dockutil &> /dev/null; then
-      dockutil --add "/System/Applications/Utilities/Activity Monitor.app" --no-restart
-      dockutil --add "/Applications/iTerm.app" --no-restart
-      dockutil --add "/System/Applications/Terminal.app" --no-restart
-    fi
-
-elif [[ "$UserType" == "Overige medewerker" ]]; then
-    install_or_notify_cask google-chrome
-
-    if command -v dockutil &> /dev/null; then
-      dockutil --add "/Applications/Google Chrome.app" --no-restart
-      dockutil --add "/System/Applications/Mail.app" --no-restart
-      dockutil --add "/System/Applications/Notes.app" --no-restart
-      dockutil --add "/Applications/Slack.app" --no-restart
-    fi
-fi
-
-if [[ "$USER" == "$newUsername" && $(command -v dockutil) ]]; then
-  killall Dock
-fi
-
-echo "[OK] Setup voltooid voor $UserType op $computerName"
-echo "--------------------------------------------"
+echo "[INFO] Setup voltooid!"
