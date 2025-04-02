@@ -1,8 +1,7 @@
-
 #!/bin/bash
 
 # ----------------------
-# Grantly Mac Setup Script v4.3
+# Grantly Mac Setup Script v4.2
 # Voor Mac Installs M4 staging & onboarding (inclusief rollback optie)
 # ----------------------
 
@@ -65,8 +64,8 @@ ascii_art='
     / / / ______   / / /_/ / / / / /  \ \ \        / / /  \/____// / /\ \ \ / / /       \ \ \_/    
    / / / /\_____\ / / /__\/ / / / /___/ /\ \      / / /    / / // / /  \/_// / /         \ \ \     
   / / /  \/____ // / /_____/ / / /_____/ /\ \    / / /    / / // / /      / / / ____      \ \ \    
- / / /_____/ / // / /\ \ \  / /_________/\ \ \  / / /    / / // / /      / /_/_/ ___/\     \ \ \   
-/ / /______\/ // / /  \ \ \/ / /_       __\ \_\/ / /    / / //_/ /      /_______/\__\/      \ \_\  
+ / / /_____/ / // / /\ \ \  / /_________/\ \ \  / / /    / / //_/ /      /_______/\__\/      \ \_\  
+/ / /______\/ // / /  \ \ \/ / /_       __\ \_\/ / /    / / //_/ /      /_______\/           \/_/  
 \/___________/ \/_/    \_\/\_\___\     /____/_/\/_/     \/_/ \_\/       \_______\/           \/_/  
 '
 
@@ -183,40 +182,44 @@ sudo scutil --set LocalHostName "$computerName"
 echo "[DONE] Computernaam ingesteld als $computerName"
 
 # === Homebrew installeren ===
-echo "Homebrew installatie..."
-sudo NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-if [ -f /opt/homebrew/bin/brew ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-  export PATH="/opt/homebrew/bin:$PATH"
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
-  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc  
-else
-  echo "[FOUT] Homebrew installatie lijkt mislukt. Pad niet gevonden."
-  exit 1
-fi
-
-# Even wachten om ervoor te zorgen dat alles correct is ingesteld
-sleep 5
-
-# Test of brew correct werkt
 if ! command -v brew &> /dev/null; then
-  echo "[FOUT] Homebrew werkt niet correct. Controleer de installatie."
-  exit 1
+  echo "Homebrew installatie..."
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+  if [ -f /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    export PATH="/opt/homebrew/bin:$PATH"
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc  
+  else
+    echo "[FOUT] Homebrew installatie lijkt mislukt. Pad niet gevonden."
+    exit 1
+  fi
+
+  # Even wachten om ervoor te zorgen dat alles correct is ingesteld
+  sleep 5
+
+  # Test of brew correct werkt
+  if ! command -v brew &> /dev/null; then
+    echo "[FOUT] Homebrew werkt niet correct. Controleer de installatie."
+    exit 1
+  fi
+
+  brew update --force --quiet
+  sudo chown -R $adminUsername:admin /opt/homebrew
+  sudo chmod -R 775 /opt/homebrew
+
+  brew analytics off
+  brew update
+  brew upgrade
+  sleep 2
+  brew doctor
+  sleep 2
+
+  echo "[DONE] Homebrew is klaar."
+else
+  echo "[INFO] Homebrew is al geïnstalleerd."
 fi
-
-brew update --force --quiet
-sudo chown -R $adminUsername:admin /opt/homebrew
-sudo chmod -R 775 /opt/homebrew
-
-brew analytics off
-brew upgrade
-brew update
-sleep 2
-brew doctor
-sleep 2
-
-echo "[DONE] Homebrew is klaar."
 
 # === Wallpaper instellen ===
 echo "Wallpapers downloaden..."
@@ -235,20 +238,46 @@ if curl -L "$wallpaperURL" -o /tmp/company-wallpaper.jpg; then
   sudo cp /tmp/company-wallpaper.jpg "$wallpaperPath"
   osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"$wallpaperPath\""
   rm /tmp/company-wallpaper.jpg
+  echo "[DONE] Wallpaper gedownload en geïnstalleerd."
 else
   echo "[ERROR] Wallpaper downloaden mislukt voor $companyInput"
 fi
 
-echo "[DONE] Wallpaper gedownload en geinstalleerd."
-sleep 2
+# === Software installeren ===
+eval "$(/opt/homebrew/bin/brew shellenv)"  # Zorgt ervoor dat brew correct werkt
+
+install_or_notify() {
+  local SOFTWARE=$1
+  if brew list --versions "$SOFTWARE" &> /dev/null; then
+    echo "[INFO] $SOFTWARE is al geïnstalleerd."
+  else
+    brew install "$SOFTWARE"
+  fi
+}
+
+install_or_notify_cask() {
+  local CASK=$1
+  if brew list --cask --versions "$CASK" &> /dev/null; then
+    echo "[INFO] $CASK is al geïnstalleerd."
+  else
+    brew install --cask "$CASK"
+  fi
+}
 
 if [[ "$UserType" == "Developer" ]]; then
-    brew install docker docker docker-compose gh wget curl php phpmyadmin 
-    brew install --cask docker 
-    brew install --cask google-chrome 
-    brew install --cask google-drive
-    brew install --cask spotify 
-    brew install --cask visual-studio-code 
+    install_or_notify docker
+    install_or_notify docker-compose
+    install_or_notify gh
+    install_or_notify wget
+    install_or_notify curl
+    install_or_notify php
+    install_or_notify_cask google-chrome
+    install_or_notify_cask google-drive
+    install_or_notify_cask google-chat
+    install_or_notify_cask filezilla
+    install_or_notify_cask spotify
+    install_or_notify_cask visual-studio-code
+    install_or_notify_cask postman
 
     if command -v dockutil &> /dev/null; then
       dockutil --add "/Applications/Google Chrome.app" --no-restart
@@ -264,8 +293,12 @@ if [[ "$UserType" == "Developer" ]]; then
     fi
 
 elif [[ "$UserType" == "Server" ]]; then
-    brew install nginx docker docker-compose redis postgresql
-    brew install --cask iterm2
+    install_or_notify nginx
+    install_or_notify docker
+    install_or_notify docker-compose
+    install_or_notify redis
+    install_or_notify postgresql
+    install_or_notify_cask iterm2
 
     if command -v dockutil &> /dev/null; then
       dockutil --add "/System/Applications/Utilities/Activity Monitor.app" --no-restart
@@ -274,7 +307,7 @@ elif [[ "$UserType" == "Server" ]]; then
     fi
 
 elif [[ "$UserType" == "Overige medewerker" ]]; then
-    brew install --cask google-chrome 
+    install_or_notify_cask google-chrome
 
     if command -v dockutil &> /dev/null; then
       dockutil --add "/Applications/Google Chrome.app" --no-restart
@@ -290,6 +323,3 @@ fi
 
 echo "[OK] Setup voltooid voor $UserType op $computerName"
 echo "--------------------------------------------"
-
-
-
