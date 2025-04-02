@@ -242,17 +242,13 @@ fi
 echo "[DONE] Wallpaper gedownload en geinstalleerd."
 sleep 2
 
-
-
-# === Software installeren ===
-eval "$(/opt/homebrew/bin/brew shellenv)"  # Zorgt ervoor dat brew correct werkt
-
-
-
-
 if [[ "$UserType" == "Developer" ]]; then
-    brew install docker docker-compose gh wget curl php
-    brew install --cask google-chrome google-drive google-chat filezilla spotify visual-studio-code postman
+    brew install docker docker docker-compose gh wget curl php phpmyadmin 
+    brew install --cask docker 
+    brew install --cask google-chrome 
+    brew install --cask google-drive
+    brew install --cask spotify 
+    brew install --cask visual-studio-code 
 
     if command -v dockutil &> /dev/null; then
       dockutil --add "/Applications/Google Chrome.app" --no-restart
