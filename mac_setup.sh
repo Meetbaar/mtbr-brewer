@@ -44,7 +44,7 @@ if [[ "$1" == "--rollback" ]]; then
   perform_rollback
 fi
 
-# Bash als standaard shell instellen indien nodig
+# === Bash als standaard shell instellen indien nodig ===
 if [[ "$SHELL" != "/bin/bash" ]]; then
   echo "[INFO] Bash wordt ingesteld als standaard shell."
   chsh -s /bin/bash
@@ -64,8 +64,8 @@ ascii_art='
     / / / ______   / / /_/ / / / / /  \ \ \        / / /  \/____// / /\ \ \ / / /       \ \ \_/    
    / / / /\_____\ / / /__\/ / / / /___/ /\ \      / / /    / / // / /  \/_// / /         \ \ \     
   / / /  \/____ // / /_____/ / / /_____/ /\ \    / / /    / / // / /      / / / ____      \ \ \    
- / / /_____/ / // / /\ \ \  / /_________/\ \ \  / / /    / / // / /      / /_/_/ ___/\     \ \ \   
-/ / /______\/ // / /  \ \ \/ / /_       __\ \_\/ / /    / / //_/ /      /_______/\__\/      \ \_\  
+ / / /_____/ / // / /\ \ \  / /_________/\ \ \  / / /    / / //_/ /      /_______/\__\/      \ \_\  
+/ / /______\/ // / /  \ \ \/ / /_       __\ \_\/ / /    / / // / /      / /_/_/ ___/\     \ \ \   
 \/___________/ \/_/    \_\/\_\___\     /____/_/\/_/     \/_/ \_\/       \_______\/           \/_/  
 '
 
@@ -183,30 +183,22 @@ echo "[DONE] Computernaam ingesteld als $computerName"
 
 # === Homebrew installeren ===
 echo "Homebrew installatie..."
-NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-if [ -f /opt/homebrew/bin/brew ]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-  export PATH="/opt/homebrew/bin:$PATH"
-  grep -q 'brew shellenv' ~/.bash_profile || echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
+if ! command -v brew &>/dev/null; then
+    echo "[INFO] Homebrew wordt geïnstalleerd..."
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
-  echo "[FOUT] Homebrew installatie lijkt mislukt. Pad niet gevonden."
-  exit 1
+    echo "[INFO] Homebrew is al geïnstalleerd."
 fi
 
+# Zorg ervoor dat Homebrew goed is ingesteld
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Maak Homebrew directory toegankelijk voor de juiste gebruiker
+sudo chown -R $(whoami) /opt/homebrew
+sudo chmod -R 755 /opt/homebrew
+
 brew update --force --quiet
-
-sudo dseditgroup -o create brewadmin
-sudo dseditgroup -o edit -a $adminUsername -t user brewadmin
-sudo chown -R root:brewadmin /opt/homebrew
-sudo chmod -R 770 /opt/homebrew
-
-brew analytics off
-brew update
-brew upgrade
-sleep 2
 brew doctor
-sleep 2
 
 echo "[DONE] Homebrew is klaar."
 
