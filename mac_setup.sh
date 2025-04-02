@@ -300,7 +300,7 @@ fi
      dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google docs.app" --replacing "Google docs" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google sheets.app" --replacing "Google sheets" --no-restart 2>/dev/null
-     dockutil --add "/Applications/Google Slides.app" --replacing "Google slides" --no-restart 2>/dev/null
+     dockutil --add "/Applications/Google slides.app" --replacing "Google slides" --no-restart 2>/dev/null
      # Herstart het Dock, maar verberg eventuele foutmeldingen
      killall Dock 2>/dev/null
  else
