@@ -2,7 +2,7 @@
 
 # ----------------------
 # Grantly Mac Setup Script v4.2
-# Voor Mac Installs M4 staging & onboarding (inclusief rollback optie) nieuw
+# Voor Mac Installs M4 staging & onboarding (inclusief rollback optie) nieuws
 # ----------------------
 
 # === Functie: Rollback uitvoeren ===
