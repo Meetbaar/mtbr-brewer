@@ -285,20 +285,17 @@ handle_error() {
 
 # Check of dockutil is geïnstalleerd en voeg applicaties toe aan de Dock
 if command -v dockutil &> /dev/null; then
-    echo "[INFO] Dockutil geïnstalleerd. Wijzigingen in Dock toepassen..."
+    # Voeg applicaties toe aan de Dock, maar verberg eventuele foutmeldingen
+    dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
+    dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
+    dockutil --add "/System/Applications/Terminal.app" --replacing "Terminal" --no-restart 2>/dev/null
     
-    dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart || handle_error "Google Chrome toevoegen aan Dock"
-    dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart || handle_error "Visual Studio Code toevoegen aan Dock"
-    dockutil --add "/System/Applications/Terminal.app" --replacing "Terminal" --no-restart || handle_error "Terminal toevoegen aan Dock"
-    
-    killall Dock || handle_error "Dock opnieuw starten"
+    # Herstart het Dock, maar verberg eventuele foutmeldingen
+    killall Dock 2>/dev/null
 else
     echo "[ERROR] Dockutil is niet geïnstalleerd."
     exit 1
 fi
-
-
-
 
     if command -v code &> /dev/null; then
       code --install-extension esbenp.prettier-vscode
