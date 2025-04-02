@@ -1,7 +1,7 @@
 #!/bin/bash
  
  # ----------------------
- # Grantly Mac Setup Script v4.5
+ # Grantly Mac Setup Script v4.6
  # Voor Mac Installs M4 staging & onboarding (inclusief rollback optie)
  # ----------------------
  
@@ -294,10 +294,10 @@ fi
  if command -v dockutil &> /dev/null; then
      # Voeg applicaties toe aan de Dock, maar verberg eventuele foutmeldingen
      dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
+     dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
+     dockutil --add "/Applications/Gmail.app" --replacing "Gmail" --no-restart 2>/dev/null
      dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
-     dockutil --add "/System/Applications/Terminal.app" --replacing "Terminal" --no-restart 2>/dev/null
-     
-     dockutil --add "/Applications/spotify.app" --replacing "spotify" --no-restart 2>/dev/null
+     dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
      # Herstart het Dock, maar verberg eventuele foutmeldingen
      killall Dock 2>/dev/null
  else
@@ -323,7 +323,6 @@ fi
      if command -v dockutil &> /dev/null; then
        dockutil --add "/System/Applications/Utilities/Activity Monitor.app" --no-restart
        dockutil --add "/Applications/iTerm.app" --no-restart
-       dockutil --add "/System/Applications/Terminal.app" --no-restart
      fi
  
  elif [[ "$UserType" == "Overige medewerker" ]]; then
@@ -334,6 +333,7 @@ fi
        dockutil --add "/System/Applications/Mail.app" --no-restart
        dockutil --add "/System/Applications/Notes.app" --no-restart
        dockutil --add "/Applications/Slack.app" --no-restart
+       dockutil --add "/Applications/spotify.app" --replacing "spotify" --no-restart 2>/dev/null
      fi
  fi
  
