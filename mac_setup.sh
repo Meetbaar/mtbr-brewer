@@ -286,6 +286,7 @@
      install_or_notify_cask spotify
      install_or_notify_cask visual-studio-code
      install_or_notify_cask postman
+     install_or_notify_cask github-desktop
  
  handle_error() {
    echo "[ERROR] Er is een fout opgetreden bij het uitvoeren van $1."
@@ -299,6 +300,7 @@
      dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google chat.app" --replacing "google chat" --no-restart 2>/dev/null
      dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
+     dockutil --add "/Applications/Github desktop.app" --replacing "Github desktop" --no-restart 2>/dev/null
      dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google docs.app" --replacing "Google docs" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google sheets.app" --replacing "Google sheets" --no-restart 2>/dev/null
