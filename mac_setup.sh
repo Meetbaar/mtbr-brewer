@@ -233,6 +233,7 @@ fi
 
 echo "[DONE] Wallpaper gedownload en geinstalleerd."
 sleep 2
+
 # === Conditional software install ===
 echo "Installaties voor $UserType"
 
@@ -286,6 +287,4 @@ fi
 
 echo "[OK] Setup voltooid voor $UserType op $computerName"
 echo "--------------------------------------------"
-
-
 
