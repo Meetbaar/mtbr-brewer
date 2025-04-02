@@ -242,7 +242,18 @@
  else
    echo "[ERROR] Wallpaper downloaden mislukt voor $companyInput"
  fi
+
  
+  # === Software installeren ===
+  eval "$(/opt/homebrew/bin/brew shellenv)"  # Zorgt ervoor dat brew correct werkt
+  
+  if command -v dockutil &> /dev/null; then
+     echo "[INFO] Dock wordt opgeschoond..."
+     dockutil --remove all --no-restart
+     killall Dock 2>/dev/null
+ else
+     echo "[ERROR] Dockutil is niet geïnstalleerd."
+ fi
 
  install_or_notify() {
    local SOFTWARE=$1
