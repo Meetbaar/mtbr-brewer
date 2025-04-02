@@ -23,11 +23,10 @@ perform_rollback() {
   sudo scutil --set LocalHostName "Macintosh"
   echo "[ROLLBACK] Computernaam hersteld."
 
-if [[ -d "/usr/local/homebrew" ]]; then
-  echo "[ROLLBACK] Homebrew verwijderen..."
-  sudo rm -rf /usr/local/homebrew
-fi
-
+  if [[ -d "/usr/local/homebrew" ]]; then
+    echo "[ROLLBACK] Homebrew verwijderen..."
+    sudo rm -rf /usr/local/homebrew
+  fi
 
   if [[ -f "/Library/Desktop Pictures/company-wallpaper.jpg" ]]; then
     sudo rm "/Library/Desktop Pictures/company-wallpaper.jpg"
@@ -186,57 +185,37 @@ echo "[DONE] Computernaam ingesteld als $computerName"
 echo "Homebrew installatie..."
 if ! command -v brew &>/dev/null; then
     echo "[INFO] Homebrew wordt geïnstalleerd..."
-  export HOMEBREW_PREFIX="/usr/local/homebrew"
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
     echo "[INFO] Homebrew is al geïnstalleerd."
 fi
 
-# Zorg ervoor dat Homebrew goed is ingesteld
-eval "$(/usr/local/homebrew/bin/brew shellenv)"
-
-# Maak Homebrew directory toegankelijk voor de juiste gebruiker
-sudo chown -R $(whoami) /opt/homebrew
-sudo chmod -R 755 /opt/homebrew
-
-brew update --force --quiet
-brew doctor
-
-echo "[DONE] Homebrew is klaar."
-
-# === Wallpaper instellen ===
-echo "Wallpapers downloaden..."
-
-case $companyInput in
-    a) wallpaperURL="https://www.grantly.nl/public-img/wall/GRANTLY-macwallpaper.jpg" ;;
-    b) wallpaperURL="https://www.grantly.nl/public-img/wall/HSL-macwallpaper.jpg" ;;
-    c) wallpaperURL="https://www.grantly.nl/public-img/wall/PWRS-macwallpaper.jpg" ;;
-    d) wallpaperURL="https://www.grantly.nl/public-img/wall/GRANTLY-macwallpaper.jpg" ;;
-esac
-
-wallpaperPath="/Library/Desktop Pictures/company-wallpaper.jpg"
-sudo mkdir -p "/Library/Desktop Pictures"
-
-if curl -L "$wallpaperURL" -o /tmp/company-wallpaper.jpg; then
-  sudo cp /tmp/company-wallpaper.jpg "$wallpaperPath"
-  osascript -e "tell application \"System Events\" to set picture of every desktop to POSIX file \"$wallpaperPath\""
-  rm /tmp/company-wallpaper.jpg
-else
-  echo "[ERROR] Wallpaper downloaden mislukt voor $companyInput"
+# Geef de juiste permissies aan de Homebrew-directory
+if [[ -d "/opt/homebrew" ]]; then
+  sudo chown -R $(whoami) /opt/homebrew
+  sudo chmod -R 755 /opt/homebrew
 fi
 
-echo "[DONE] Wallpaper gedownload en geinstalleerd."
-sleep 2
+# Zorg ervoor dat Homebrew geïnstalleerd is in het systeem
+export PATH="/opt/homebrew/bin:$PATH"
+echo "Homebrew installatie voltooid."
 
-# === Conditional software install ===
+# Voeg gewenste programma's toe via Homebrew en Cask
+echo "Installeer FileZilla via Homebrew..."
+brew install --cask filezilla
+
+echo "Installeer andere programma's via Homebrew..."
+brew install --cask google-chrome visual-studio-code slack
+
+# === Dock aanpassen ===
+dockutil --add /Applications/Google\ Chrome.app --no-restart
+dockutil --add /Applications/Visual\ Studio\ Code.app --no-restart
+dockutil --add /Applications/Slack.app --no-restart
+killall Dock
+
 echo "Installaties voor $UserType"
 
-brew install dockutil || echo "[WAARSCHUWING] dockutil kon niet worden geïnstalleerd."
-
-if command -v dockutil &> /dev/null; then
-  dockutil --remove all --no-restart
-fi
-
+# Developer instellingen
 if [[ "$UserType" == "Developer" ]]; then
     brew install docker docker-compose gh wget curl php
     brew install --cask google-chrome google-drive google-chat filezilla spotify visual-studio-code postman
@@ -254,6 +233,7 @@ if [[ "$UserType" == "Developer" ]]; then
       code --install-extension github.copilot
     fi
 
+# Server instellingen
 elif [[ "$UserType" == "Server" ]]; then
     brew install nginx docker docker-compose redis postgresql
     brew install --cask iterm2
@@ -264,6 +244,7 @@ elif [[ "$UserType" == "Server" ]]; then
       dockutil --add "/System/Applications/Terminal.app" --no-restart
     fi
 
+# Overige medewerker instellingen
 elif [[ "$UserType" == "Overige medewerker" ]]; then
     brew install --cask google-chrome 
 
@@ -275,10 +256,10 @@ elif [[ "$UserType" == "Overige medewerker" ]]; then
     fi
 fi
 
+# Als dockutil aanwezig is en de gebruiker hetzelfde is als het aangemaakte account
 if [[ "$USER" == "$newUsername" && $(command -v dockutil) ]]; then
   killall Dock
 fi
 
 echo "[OK] Setup voltooid voor $UserType op $computerName"
 echo "--------------------------------------------"
-
