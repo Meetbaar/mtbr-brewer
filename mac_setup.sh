@@ -192,7 +192,7 @@
      echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
      echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc  
    else
-     #echo "[FOUT] Homebrew installatie lijkt mislukt. Pad niet gevonden."
+     echo "[FOUT] Homebrew installatie lijkt mislukt. Pad niet gevonden."
      exit 1
    fi
  
