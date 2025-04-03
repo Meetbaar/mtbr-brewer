@@ -85,49 +85,48 @@
  tell application "System Settings" to quit
  end try'
  
- # === Hulpfunctie voor dynamische UniqueID ===
- get_next_uid() {
-   dscl . -list /Users UniqueID | awk '{print $2}' | sort -n | tail -1 | awk '{print $1+1}'
- }
- 
- # === Adminaccount aanmaken ===
- read -p "Wil je een adminaccount aanmaken? (y/n): " createAdmin
- if [[ "$createAdmin" == "y" ]]; then
-     read -p "Voer naam in voor admingroep (bv. Admins): " adminGroup
-     read -p "Voer gebruikersnaam in voor adminaccount: " adminUsername
-     read -s -p "Voer wachtwoord in voor adminaccount: " adminPassword
-     echo
- 
-     adminUID=$(get_next_uid)
-     sudo dscl . -create /Groups/$adminGroup
-     sudo dscl . -create /Users/$adminUsername
-     sudo dscl . -create /Users/$adminUsername UserShell /bin/bash
-     sudo dscl . -create /Users/$adminUsername RealName "$adminUsername"
-     sudo dscl . -create /Users/$adminUsername UniqueID "$adminUID"
-     sudo dscl . -create /Users/$adminUsername PrimaryGroupID "80"
-     sudo dscl . -create /Users/$adminUsername NFSHomeDirectory /Users/$adminUsername
-     sudo dscl . -passwd /Users/$adminUsername "$adminPassword"
-     sudo dscl . -append /Groups/admin GroupMembership $adminUsername
-     echo "[DONE] Adminaccount '$adminUsername' aangemaakt."
- fi
- 
- # === Gewone gebruiker aanmaken ===
- read -p "Wil je een gewone gebruiker aanmaken? (y/n): " createUser
- if [[ "$createUser" == "y" ]]; then
-     read -p "Voer gebruikersnaam in: " newUsername
-     read -s -p "Voer wachtwoord in: " newPassword
-     echo
- 
-     userUID=$(get_next_uid)
-     sudo dscl . -create /Users/$newUsername
-     sudo dscl . -create /Users/$newUsername UserShell /bin/bash
-     sudo dscl . -create /Users/$newUsername RealName "$newUsername"
-     sudo dscl . -create /Users/$newUsername UniqueID "$userUID"
-     sudo dscl . -create /Users/$newUsername PrimaryGroupID "20"
-     sudo dscl . -create /Users/$newUsername NFSHomeDirectory /Users/$newUsername
-     sudo dscl . -passwd /Users/$newUsername "$newPassword"
-     echo "[DONE] Gebruiker '$newUsername' aangemaakt."
- fi
+read -s -p "Voer een hoofdwachtwoord in: " mainPassword
+echo
+
+# === Hulpfunctie voor dynamische UniqueID ===
+get_next_uid() {
+  dscl . -list /Users UniqueID | awk '{print $2}' | sort -n | tail -1 | awk '{print $1+1}'
+}
+
+# === Adminaccount aanmaken ===
+read -p "Wil je een adminaccount aanmaken? (y/n): " createAdmin
+if [[ "$createAdmin" == "y" ]]; then
+    read -p "Voer naam in voor admingroep (bv. Admins): " adminGroup
+    read -p "Voer gebruikersnaam in voor adminaccount: " adminUsername
+    
+    adminUID=$(get_next_uid)
+    sudo dscl . -create /Groups/$adminGroup
+    sudo dscl . -create /Users/$adminUsername
+    sudo dscl . -create /Users/$adminUsername UserShell /bin/bash
+    sudo dscl . -create /Users/$adminUsername RealName "$adminUsername"
+    sudo dscl . -create /Users/$adminUsername UniqueID "$adminUID"
+    sudo dscl . -create /Users/$adminUsername PrimaryGroupID "80"
+    sudo dscl . -create /Users/$adminUsername NFSHomeDirectory /Users/$adminUsername
+    sudo dscl . -passwd /Users/$adminUsername "$mainPassword"
+    sudo dscl . -append /Groups/admin GroupMembership $adminUsername
+    echo "[DONE] Adminaccount '$adminUsername' aangemaakt."
+fi
+
+# === Gewone gebruiker aanmaken ===
+read -p "Wil je een gewone gebruiker aanmaken? (y/n): " createUser
+if [[ "$createUser" == "y" ]]; then
+    read -p "Voer gebruikersnaam in: " newUsername
+    
+    userUID=$(get_next_uid)
+    sudo dscl . -create /Users/$newUsername
+    sudo dscl . -create /Users/$newUsername UserShell /bin/bash
+    sudo dscl . -create /Users/$newUsername RealName "$newUsername"
+    sudo dscl . -create /Users/$newUsername UniqueID "$userUID"
+    sudo dscl . -create /Users/$newUsername PrimaryGroupID "20"
+    sudo dscl . -create /Users/$newUsername NFSHomeDirectory /Users/$newUsername
+    sudo dscl . -passwd /Users/$newUsername "$mainPassword"
+    echo "[DONE] Gebruiker '$newUsername' aangemaakt."
+fi
  
  # === Mac type kiezen ===
  echo "Wat voor type Mac is dit?"
