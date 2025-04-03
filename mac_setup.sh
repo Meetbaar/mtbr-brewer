@@ -288,9 +288,16 @@ install_filezilla() {
     return 1
   fi
 
-  tar -xjf "$FILEZILLA_TMP" -C /Applications
-  if [ $? -ne 0 ]; then
-    echo "[ERROR] Uitpakken van FileZilla is mislukt."
+  # Check if the downloaded file is a tar.bz2 file
+  if file "$FILEZILLA_TMP" | grep -q 'bzip2 compressed data'; then
+    tar -xjf "$FILEZILLA_TMP" -C /Applications
+    if [ $? -ne 0 ]; then
+      echo "[ERROR] Uitpakken van FileZilla is mislukt."
+      rm "$FILEZILLA_TMP"
+      return 1
+    fi
+  else
+    echo "[ERROR] Gedownloade bestand is geen geldig tar.bz2 bestand."
     rm "$FILEZILLA_TMP"
     return 1
   fi
