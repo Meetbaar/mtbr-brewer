@@ -383,5 +383,12 @@ create_development_repo
    killall Dock
  fi
 
+ # Finder instellingen aanpassen: Toon padbalk en tabbladbalk
+defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder ShowTabView -bool true
+killall Finder
+echo "[DONE] Finder-instellingen aangepast: padbalk en tabbladbalk ingeschakeld."
+
+
  echo "[OK] Setup voltooid voor $UserType op $computerName"
  echo "--------------------------------------------"
