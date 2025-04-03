@@ -194,26 +194,22 @@ fi
 
 if ! command -v brew &> /dev/null; then
   echo "Homebrew installatie..."
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   if [ -f /opt/homebrew/bin/brew ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
     export PATH="/opt/homebrew/bin:$PATH"
     echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc  
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
+    echo "[DONE] Homebrew geïnstalleerd."
   else
-    echo "[FOUT] Homebrew installatie lijkt mislukt. Pad niet gevonden."
+    echo "[FOUT] Homebrew installatie mislukt. Pad niet gevonden."
     exit 1
   fi
+else
+  echo "[INFO] Homebrew is al geïnstalleerd."
+fi
 
-  # Even wachten om ervoor te zorgen dat alles correct is ingesteld
-  sleep 2
-
-  # Test of brew correct werkt
-  if ! command -v brew &> /dev/null; then
-    echo "[FOUT] Homebrew werkt niet correct. Controleer de installatie."
-    exit 1
-  fi
 
   brew update --force --quiet
   sudo chown -R $adminUsername:admin /opt/homebrew
