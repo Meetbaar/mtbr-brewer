@@ -1,7 +1,7 @@
 #!/bin/bash
 
  # ----------------------
- # Grantly Mac Setup Script v4.7
+ # Grantly Mac Setup Script v4.8
  # Voor Mac Installs M4 staging & onboarding (inclusief rollback optie)
  # ----------------------
 
@@ -328,7 +328,7 @@ create_development_repo
      dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
      dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
-     dockutil --add "/Applications/Terminal.app" --replacing "Terminal" --no-restart 2>/dev/null
+     dockutil --add "/System/Applications/Utilities/Terminal.app" --no-restart
      dockutil --add "/Applications/Github desktop.app" --replacing "Github desktop" --no-restart 2>/dev/null
      dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google docs.app" --replacing "Google docs" --no-restart 2>/dev/null
