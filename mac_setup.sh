@@ -105,9 +105,6 @@ if [[ "$createUser" == "y" ]]; then
     read -p "Voer gebruikersnaam in: " newUsername
 fi
 
-# === Wachtwoord eenmaal opvragen ===
-read -s -p "Voer een hoofdwachtwoord in: " mainPassword
-echo
 
 # === Adminaccount daadwerkelijk aanmaken ===
 if [[ "$createAdmin" == "y" ]]; then
