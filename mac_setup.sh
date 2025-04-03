@@ -187,6 +187,11 @@ sudo scutil --set LocalHostName "$computerName"
 echo "[DONE] Computernaam ingesteld als $computerName"
 
 # === Homebrew installeren ===
+if [[ "$EUID" -eq 0 ]]; then
+  echo "[ERROR] Deze script moet niet als root worden uitgevoerd. Stop."
+  exit 1
+fi
+
 if ! command -v brew &> /dev/null; then
   echo "Homebrew installatie..."
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -387,8 +392,7 @@ elif [[ "$UserType" == "Overige medewerker" ]]; then
 fi
 
 if [[ "$USER" == "$newUsername" && $(command -v dockutil) ]]; then
-  killall Dock
-fi
+  killall
 
 echo "[OK] Setup voltooid voor $UserType op $computerName"
 echo "--------------------------------------------"
