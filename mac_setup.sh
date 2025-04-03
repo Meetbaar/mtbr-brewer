@@ -85,8 +85,7 @@
  tell application "System Settings" to quit
  end try'
  
-read -s -p "Voer een hoofdwachtwoord in: " mainPassword
-echo
+
 
 # === Hulpfunctie voor dynamische UniqueID ===
 get_next_uid() {
