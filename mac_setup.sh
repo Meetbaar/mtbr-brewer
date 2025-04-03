@@ -97,7 +97,20 @@ read -p "Wil je een adminaccount aanmaken? (y/n): " createAdmin
 if [[ "$createAdmin" == "y" ]]; then
     read -p "Voer naam in voor admingroep (bv. Admins): " adminGroup
     read -p "Voer gebruikersnaam in voor adminaccount: " adminUsername
-    
+fi
+
+# === Gewone gebruiker aanmaken ===
+read -p "Wil je een gewone gebruiker aanmaken? (y/n): " createUser
+if [[ "$createUser" == "y" ]]; then
+    read -p "Voer gebruikersnaam in: " newUsername
+fi
+
+# === Wachtwoord eenmaal opvragen ===
+read -s -p "Voer een hoofdwachtwoord in: " mainPassword
+echo
+
+# === Adminaccount daadwerkelijk aanmaken ===
+if [[ "$createAdmin" == "y" ]]; then
     adminUID=$(get_next_uid)
     sudo dscl . -create /Groups/$adminGroup
     sudo dscl . -create /Users/$adminUsername
@@ -111,11 +124,8 @@ if [[ "$createAdmin" == "y" ]]; then
     echo "[DONE] Adminaccount '$adminUsername' aangemaakt."
 fi
 
-# === Gewone gebruiker aanmaken ===
-read -p "Wil je een gewone gebruiker aanmaken? (y/n): " createUser
+# === Gewone gebruiker daadwerkelijk aanmaken ===
 if [[ "$createUser" == "y" ]]; then
-    read -p "Voer gebruikersnaam in: " newUsername
-    
     userUID=$(get_next_uid)
     sudo dscl . -create /Users/$newUsername
     sudo dscl . -create /Users/$newUsername UserShell /bin/bash
@@ -126,6 +136,7 @@ if [[ "$createUser" == "y" ]]; then
     sudo dscl . -passwd /Users/$newUsername "$mainPassword"
     echo "[DONE] Gebruiker '$newUsername' aangemaakt."
 fi
+
  
  # === Mac type kiezen ===
  echo "Wat voor type Mac is dit?"
