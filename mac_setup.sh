@@ -279,30 +279,33 @@ install_or_notify_cask() {
 install_filezilla() {
   local FILEZILLA_URL="https://dl1.cdn.filezilla-project.org/client/FileZilla_3.68.1_macos-x86.app.tar.bz2?h=lQUm44Y-RTLClvIKIkGVkw&x=1743607766"
   local FILEZILLA_TMP="/tmp/FileZilla_3.68.1_macos-x86.app.tar.bz2"
+  local FILEZILLA_DIR="/tmp/FileZilla"
+  local FILEZILLA_APP="/tmp/FileZilla/FileZilla.app"
   local FILEZILLA_TARGET="/Applications/FileZilla.app"
 
   echo "[INFO] FileZilla wordt gedownload en geïnstalleerd..."
+  mkdir -p "$FILEZILLA_DIR"
   curl -L "$FILEZILLA_URL" -o "$FILEZILLA_TMP"
   if [ $? -ne 0 ]; then
     echo "[ERROR] Download van FileZilla is mislukt."
     return 1
   fi
 
-  # Check if the downloaded file is a tar.bz2 file
-  if file "$FILEZILLA_TMP" | grep -q 'bzip2 compressed data'; then
-    tar -xjf "$FILEZILLA_TMP" -C /Applications
-    if [ $? -ne 0 ]; then
-      echo "[ERROR] Uitpakken van FileZilla is mislukt."
-      rm "$FILEZILLA_TMP"
-      return 1
-    fi
-  else
-    echo "[ERROR] Gedownloade bestand is geen geldig tar.bz2 bestand."
-    rm "$FILEZILLA_TMP"
+  tar -xjf "$FILEZILLA_TMP" -C "$FILEZILLA_DIR"
+  if [ $? -ne 0 ]; then
+    echo "[ERROR] Uitpakken van FileZilla is mislukt."
+    rm -rf "$FILEZILLA_TMP" "$FILEZILLA_DIR"
     return 1
   fi
 
-  rm "$FILEZILLA_TMP"
+  sudo mv "$FILEZILLA_APP" "$FILEZILLA_TARGET"
+  if [ $? -ne 0 ]; then
+    echo "[ERROR] Verplaatsen van FileZilla naar /Applications is mislukt."
+    rm -rf "$FILEZILLA_TMP" "$FILEZILLA_DIR"
+    return 1
+  fi
+
+  rm -rf "$FILEZILLA_TMP" "$FILEZILLA_DIR"
 
   if [[ -d "$FILEZILLA_TARGET" ]]; then
     echo "[DONE] FileZilla is geïnstalleerd."
