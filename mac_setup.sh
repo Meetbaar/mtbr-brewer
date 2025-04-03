@@ -189,7 +189,7 @@ echo "[DONE] Computernaam ingesteld als $computerName"
 # === Homebrew installeren ===
 if ! command -v brew &> /dev/null; then
   echo "Homebrew installatie..."
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  sudo NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   if [ -f /opt/homebrew/bin/brew ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
