@@ -280,13 +280,14 @@
      install_or_notify wget
      install_or_notify curl
      install_or_notify php
+     install_or_notify_cask docker
      install_or_notify_cask google-chrome
      install_or_notify_cask google-drive
-     install_or_notify_cask google-chat
      install_or_notify_cask spotify
      install_or_notify_cask visual-studio-code
      install_or_notify_cask postman
      install_or_notify_cask github
+     
 
  handle_error() {
    echo "[ERROR] Er is een fout opgetreden bij het uitvoeren van $1."
@@ -298,7 +299,6 @@
      # Voeg applicaties toe aan de Dock, maar verberg eventuele foutmeldingen
      dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
-     dockutil --add "/Applications/Google chat.app" --replacing "google chat" --no-restart 2>/dev/null
      dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
      dockutil --add "/Applications/Github desktop.app" --replacing "Github desktop" --no-restart 2>/dev/null
      dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
@@ -323,6 +323,8 @@
      install_or_notify nginx
      install_or_notify docker
      install_or_notify docker-compose
+     install_or_notify_cask google-chrome
+     install_or_notify_cask google-drive
      install_or_notify redis
      install_or_notify postgresql
      install_or_notify_cask iterm2
@@ -340,7 +342,11 @@
        dockutil --add "/System/Applications/Mail.app" --no-restart
        dockutil --add "/System/Applications/Notes.app" --no-restart
        dockutil --add "/Applications/Slack.app" --no-restart
+       dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
        dockutil --add "/Applications/spotify.app" --replacing "spotify" --no-restart 2>/dev/null
+       dockutil --add "/Applications/Google docs.app" --replacing "Google docs" --no-restart 2>/dev/null
+       dockutil --add "/Applications/Google sheets.app" --replacing "Google sheets" --no-restart 2>/dev/null
+       dockutil --add "/Applications/Google slides.app" --replacing "Google slides" --no-restart 2>/dev/null
      fi
  fi
 
