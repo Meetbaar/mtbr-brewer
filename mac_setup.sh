@@ -283,7 +283,18 @@ install_filezilla() {
 
   echo "[INFO] FileZilla wordt gedownload en geïnstalleerd..."
   curl -L "$FILEZILLA_URL" -o "$FILEZILLA_TMP"
+  if [ $? -ne 0 ]; then
+    echo "[ERROR] Download van FileZilla is mislukt."
+    return 1
+  fi
+
   tar -xjf "$FILEZILLA_TMP" -C /Applications
+  if [ $? -ne 0 ]; then
+    echo "[ERROR] Uitpakken van FileZilla is mislukt."
+    rm "$FILEZILLA_TMP"
+    return 1
+  fi
+
   rm "$FILEZILLA_TMP"
 
   if [[ -d "$FILEZILLA_TARGET" ]]; then
