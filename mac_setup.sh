@@ -1,7 +1,7 @@
 #!/bin/bash
 
  # ----------------------
- # Grantly Mac Setup Script v4.6
+ # Grantly Mac Setup Script v4.7
  # Voor Mac Installs M4 staging & onboarding (inclusief rollback optie)
  # ----------------------
 
@@ -221,6 +221,34 @@
    echo "[INFO] Homebrew is al geïnstalleerd."
  fi
 
+ # === Maak de Development Directory ===
+create_development_repo() {
+  # De root directory voor de ontwikkelprojecten
+  development_dir="$HOME/Development"
+  
+  if [ ! -d "$development_dir" ]; then
+    echo "[INFO] 'Development' directory wordt aangemaakt..."
+    mkdir -p "$development_dir"
+    echo "[DONE] 'Development' directory aangemaakt."
+  else
+    echo "[INFO] 'Development' directory bestaat al."
+  fi
+
+  # Zet de 'Development' directory als de default voor git clones
+  echo "[INFO] De 'Development' directory wordt de standaard voor git clone."
+  echo "cd $development_dir" >> ~/.bash_profile  # voor bash
+  echo "cd $development_dir" >> ~/.zshrc        # voor zsh (indien gebruikt)
+  echo "[INFO] Standaard directory voor git clone ingesteld."
+
+  # Herlaad de configuratie voor het shell-profiel
+  source ~/.bash_profile
+  source ~/.zshrc
+}
+
+# Roep de functie aan om de Development directory aan te maken
+create_development_repo
+
+
  # === Wallpaper instellen ===
  echo "Wallpapers downloaden..."
 
@@ -300,6 +328,7 @@
      dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
      dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
+     dockutil --add "/Applications/Terminal.app" --replacing "Terminal" --no-restart 2>/dev/null
      dockutil --add "/Applications/Github desktop.app" --replacing "Github desktop" --no-restart 2>/dev/null
      dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
      dockutil --add "/Applications/Google docs.app" --replacing "Google docs" --no-restart 2>/dev/null
