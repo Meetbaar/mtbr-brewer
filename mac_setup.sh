@@ -360,6 +360,7 @@ if [[ "$UserType" == "Developer" ]]; then
         dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
         dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
         dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
+        dockutil --add "/Applications/Docker.app" --replacing "Docker" --no-restart 2>/dev/null
         dockutil --add "/Applications/Utilities/Terminal.app" --no-restart 2>/dev/null
         dockutil --add "/Applications/Github desktop.app" --replacing "Github desktop" --no-restart 2>/dev/null
         dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
