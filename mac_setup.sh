@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------
-# Grantly Mac Setup Script v4.8
+# Grantly Mac Setup Script v4.9
 # Voor Mac Installs M4 staging & onboarding (inclusief rollback optie)
 # ----------------------
 
@@ -302,13 +302,11 @@ install_or_notify_cask() {
 }
 
 if [[ "$UserType" == "Developer" ]]; then
-    install_or_notify docker
-    install_or_notify docker-compose
     install_or_notify gh
     install_or_notify wget
     install_or_notify curl
     install_or_notify php
-    brew install --cask docker
+    install_or_notify_cask docker
     install_or_notify_cask google-chrome
     install_or_notify_cask google-drive
     install_or_notify_cask spotify
@@ -327,6 +325,7 @@ if command -v dockutil &> /dev/null; then
     dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
     dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
     dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
+    dockutil --add "/Applications/Docker.app" --replacing "Docker" --no-restart 2>/dev/null
     dockutil --add "/Applications/Utilities/Terminal.app" --no-restart 2>/dev/null
     dockutil --add "/Applications/Github desktop.app" --replacing "Github desktop" --no-restart 2>/dev/null
     dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
