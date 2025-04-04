@@ -401,7 +401,7 @@ elif [[ "$UserType" == "Overige medewerker" ]]; then
       dockutil --add "/System/Applications/Notes.app" --no-restart
       dockutil --add "/Applications/Slack.app" --no-restart
       dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
-      dockutil --add "/Applications/spotify.app" --replacing "spotify" --no-restart 2>/dev/null
+      dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
       dockutil --add "/Applications/Google docs.app" --replacing
       dockutil --add "/Applications/Google sheets.app" --replacing "Google sheets" --no-restart 2>/dev/null
       dockutil --add "/Applications/Google slides.app" --replacing "Google slides" --no-restart 2>/dev/null
