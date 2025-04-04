@@ -421,7 +421,7 @@ killall Finder
 echo "[DONE] Finder-instellingen aangepast: padbalk en tabbladbalk ingeschakeld."
 
 # --- Lokale hosting starten als profiel == developer ---
-if [[ "$medewerker_type" == "b" ]]; then
+if [[ "$UserType" == "Developer" ]]; then
   echo "[INFO] Developer profiel gedetecteerd – lokale hosting wordt gestart..."
 
   # Check of Docker geïnstalleerd is
@@ -432,6 +432,9 @@ if [[ "$medewerker_type" == "b" ]]; then
     docker-compose up -d
 
     echo "[PLACEHOLDER] docker-compose up wordt hier gestart zodra klaar."
+    
+    # Start Docker GUI
+    open -a Docker
   else
     echo "[WAARSCHUWING] Docker is nog niet correct geïnstalleerd. Lokale hosting is niet gestart."
   fi
