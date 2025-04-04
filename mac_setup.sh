@@ -307,40 +307,6 @@ install_or_notify_cask() {
   fi
 }
 
-# Functie om een bestaande Docker binary te verwijderen
-remove_existing_docker_binary() {
-  if [ -f "/opt/homebrew/share/zsh/site-functions/_docker" ]; then
-    echo "[INFO] Verwijderen van bestaande Docker binary..."
-    sudo rm -f /opt/homebrew/share/zsh/site-functions/_docker
-    echo "[DONE] Bestaande Docker binary is verwijderd."
-  else
-    echo "[INFO] Geen bestaande Docker binary gevonden."
-  fi
-}
-
-# Functie om Docker te installeren
-install_docker() {
-  echo "[INFO] Docker wordt geïnstalleerd..."
-
-  # Download Docker Desktop
-  curl -L "https://desktop.docker.com/mac/stable/Docker.dmg" -o /tmp/Docker.dmg
-
-  # Attach the DMG
-  sudo hdiutil attach /tmp/Docker.dmg
-
-  # Install Docker
-  sudo /Volumes/Docker/Docker.app/Contents/MacOS/install
-
-  # Detach the DMG
-  sudo hdiutil detach /Volumes/Docker
-
-  echo "[DONE] Docker is geïnstalleerd."
-}
-
-# Specifieke afhandeling voor Docker installatie
-remove_existing_docker_binary
-install_docker
-
 if [[ "$UserType" == "Developer" ]]; then
     install_or_notify gh
     install_or_notify wget
@@ -368,7 +334,6 @@ if command -v dockutil &> /dev/null; then
     dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
     dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
     dockutil --add "/Applications/Utilities/Terminal.app" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Docker.app" --replacing "Docker" --no-restart 2>/dev/null
     dockutil --add "/Applications/Github desktop.app" --replacing "Github desktop" --no-restart 2>/dev/null
     dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
     dockutil --add "/Applications/Google docs.app" --replacing "Google docs" --no-restart 2>/dev/null
