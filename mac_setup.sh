@@ -249,7 +249,6 @@ create_development_repo() {
 # Roep de functie aan om de Development directory aan te maken
 create_development_repo
 
-
 # === Wallpaper instellen ===
 echo "Wallpapers downloaden..."
 
@@ -301,19 +300,26 @@ install_or_notify_cask() {
   fi
 }
 
+# Specifieke afhandeling voor Docker installatie
+if [ -f "/opt/homebrew/etc/bash_completion.d/docker" ]; then
+  echo "[INFO] Verwijderen van bestaande Docker binary..."
+  sudo rm -f /opt/homebrew/etc/bash_completion.d/docker || handle_error "Verwijderen van bestaande Docker binary"
+fi
+
 if [[ "$UserType" == "Developer" ]]; then
     install_or_notify gh
     install_or_notify wget
     install_or_notify curl
     install_or_notify php
-    brew install --cask docker
+    install_or_notify docker
+    install_or_notify docker-compose
+    install_or_notify_cask docker
     install_or_notify_cask google-chrome
     install_or_notify_cask google-drive
     install_or_notify_cask spotify
     install_or_notify_cask visual-studio-code
     install_or_notify_cask postman
     install_or_notify_cask github
-
 
 handle_error() {
   echo "[ERROR] Er is een fout opgetreden bij het uitvoeren van $1."
