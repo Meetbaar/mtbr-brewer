@@ -422,27 +422,11 @@ echo "[DONE] Finder-instellingen aangepast: padbalk en tabbladbalk ingeschakeld.
 
 # --- Lokale hosting starten als profiel == developer ---
 if [[ "$UserType" == "Developer" ]]; then
-  echo "[INFO] Developer profiel gedetecteerd – lokale hosting wordt gestart..."
+  echo "[INFO] Developer profiel gedetecteerd – Docker GUI wordt gestart..."
 
   # Check of Docker geïnstalleerd is
   if command -v docker &> /dev/null; then
-    echo "[INFO] Docker is geïnstalleerd. Poging om lokale containers te starten..."
-
-    project_dir="$HOME/Development/projectnaam"
-    if [ ! -d "$project_dir" ]; then
-      echo "[ERROR] De directory $project_dir bestaat niet. Maken..."
-      mkdir -p "$project_dir"
-    fi
-
-    cd "$project_dir"
-
-    if [ ! -f "docker-compose.yml" ]; then
-      echo "[ERROR] Geen docker-compose.yml bestand gevonden in $project_dir. Controleer de configuratie."
-      exit 1
-    fi
-
-    docker-compose up -d
-    echo "[PLACEHOLDER] docker-compose up wordt hier gestart zodra klaar."
+    echo "[INFO] Docker is geïnstalleerd. Docker GUI wordt gestart..."
 
     # Start Docker GUI
     open -a Docker
@@ -452,7 +436,7 @@ if [[ "$UserType" == "Developer" ]]; then
       echo "[ERROR] Docker GUI kon niet worden gestart."
     fi
   else
-    echo "[WAARSCHUWING] Docker is nog niet correct geïnstalleerd. Lokale hosting is niet gestart."
+    echo "[WAARSCHUWING] Docker is nog niet correct geïnstalleerd. Docker GUI is niet gestart."
   fi
 fi
 kill "$SUDO_KEEPALIVE_PID"
