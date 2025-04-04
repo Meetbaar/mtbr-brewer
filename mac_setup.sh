@@ -4,7 +4,12 @@
 # Grantly Mac Setup Script v4.10
 # Voor Mac Installs M4 staging & onboarding (inclusief rollback optie)
 # ----------------------
+    # Vraag om sudo-rechten op voorhand
+sudo -v
 
+# Houd sudo actief tijdens het script
+while true; do sudo -n true; sleep 60; done 2>/dev/null &
+SUDO_KEEPALIVE_PID="$!"
 # === Functie: Rollback uitvoeren ===
 perform_rollback() {
   echo "[ROLLBACK] Herstellen van systeem naar pre-installatiestatus..."
@@ -98,12 +103,6 @@ if [[ "$createAdmin" == "y" ]]; then
     read -s -p "Voer wachtwoord in voor adminaccount: " adminPassword
     echo
 
-    # Vraag om sudo-rechten op voorhand
-sudo -v
-
-# Houd sudo actief tijdens het script
-while true; do sudo -n true; sleep 60; done 2>/dev/null &
-SUDO_KEEPALIVE_PID="$!"
 
     adminUID=$(get_next_uid)
     sudo dscl . -create /Groups/$adminGroup
