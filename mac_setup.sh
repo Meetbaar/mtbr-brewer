@@ -306,13 +306,27 @@ if [[ "$UserType" == "Developer" ]]; then
     install_or_notify wget
     install_or_notify curl
     install_or_notify php
-    install_or_notify_cask docker
     install_or_notify_cask google-chrome
     install_or_notify_cask google-drive
     install_or_notify_cask spotify
     install_or_notify_cask visual-studio-code
     install_or_notify_cask postman
     install_or_notify_cask github
+
+    echo "[INFO] Oude versies van Docker worden verwijderd..."
+sudo rm -rf /Applications/Docker.app
+rm -rf ~/Library/Containers/com.docker.docker
+rm -rf ~/.docker
+sudo rm -rf /opt/homebrew/Caskroom/docker
+
+echo "[INFO] Oude symlinks worden verwijderd..."
+sudo rm -f /usr/local/bin/docker
+sudo rm -f /usr/local/bin/docker-compose
+sudo rm -f /opt/homebrew/etc/bash_completion.d/docker
+
+echo "[INFO] Docker wordt opnieuw geïnstalleerd..."
+brew install --cask docker
+
 
 handle_error() {
   echo "[ERROR] Er is een fout opgetreden bij het uitvoeren van $1."
