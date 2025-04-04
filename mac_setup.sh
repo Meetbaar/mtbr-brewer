@@ -308,7 +308,7 @@ if [[ "$UserType" == "Developer" ]]; then
     install_or_notify wget
     install_or_notify curl
     install_or_notify php
-    install_or_notify_cask docker
+    brew install --cask docker
     install_or_notify_cask google-chrome
     install_or_notify_cask google-drive
     install_or_notify_cask spotify
