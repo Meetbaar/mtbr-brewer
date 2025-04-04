@@ -424,7 +424,7 @@ echo "[DONE] Finder-instellingen aangepast: padbalk en tabbladbalk ingeschakeld.
 if [[ "$UserType" == "Developer" ]]; then
   echo "[INFO] Developer profiel gedetecteerd – Docker GUI wordt gestart..."
 
-  # Check of Docker geïnstalleerd is
+  # Check if Docker is installed
   if command -v docker &> /dev/null; then
     echo "[INFO] Docker is geïnstalleerd. Docker GUI wordt gestart..."
 
