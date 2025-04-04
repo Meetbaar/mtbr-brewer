@@ -410,7 +410,7 @@ if [[ "$medewerker_type" == "b" ]]; then
     echo "[WAARSCHUWING] Docker is nog niet correct geïnstalleerd. Lokale hosting is niet gestart."
   fi
 fi
-
+kill "$SUDO_KEEPALIVE_PID"
 
 echo "[OK] Setup voltooid voor $UserType op $computerName"
 echo "--------------------------------------------"
