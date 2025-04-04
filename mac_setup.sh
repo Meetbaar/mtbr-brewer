@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ----------------------
-# Grantly Mac Setup Script v4.9
+# Grantly Mac Setup Script v4.10
 # Voor Mac Installs M4 staging & onboarding (inclusief rollback optie)
 # ----------------------
 
@@ -386,6 +386,24 @@ defaults write com.apple.finder ShowPathbar -bool true
 defaults write com.apple.finder ShowTabView -bool true
 killall Finder
 echo "[DONE] Finder-instellingen aangepast: padbalk en tabbladbalk ingeschakeld."
+
+# --- Lokale hosting starten als profiel == developer ---
+if [[ "$medewerker_type" == "b" ]]; then
+  echo "[INFO] Developer profiel gedetecteerd – lokale hosting wordt gestart..."
+
+  # Check of Docker geïnstalleerd is
+  if command -v docker &> /dev/null; then
+    echo "[INFO] Docker is geïnstalleerd. Poging om lokale containers te starten..."
+
+    cd ~/Development/projectnaam
+    docker-compose up -d
+
+    echo "[PLACEHOLDER] docker-compose up wordt hier gestart zodra klaar."
+  else
+    echo "[WAARSCHUWING] Docker is nog niet correct geïnstalleerd. Lokale hosting is niet gestart."
+  fi
+fi
+
 
 echo "[OK] Setup voltooid voor $UserType op $computerName"
 echo "--------------------------------------------"
