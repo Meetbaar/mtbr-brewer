@@ -272,7 +272,7 @@ else
 fi
 
 brew install dockutil
-echo "[DONE] dockutil geinstaleerd"
+echo "[DONE] dockutil geinstalleerd"
 
 if command -v dockutil &> /dev/null; then
    echo "[INFO] Dock wordt opgeschoond..."
@@ -300,11 +300,29 @@ install_or_notify_cask() {
   fi
 }
 
+# Functie om een bestaande Docker binary te verwijderen
+remove_existing_docker_binary() {
+  if [ -f "/opt/homebrew/share/zsh/site-functions/_docker" ]; then
+    echo "[INFO] Verwijderen van bestaande Docker binary..."
+    sudo rm -f /opt/homebrew/share/zsh/site-functions/_docker
+    echo "[DONE] Bestaande Docker binary is verwijderd."
+  else
+    echo "[INFO] Geen bestaande Docker binary gevonden."
+  fi
+}
+
+# Functie om Docker te installeren
+install_docker() {
+  echo "[INFO] Docker wordt geïnstalleerd..."
+  brew install docker
+  brew install docker-compose
+  brew install --cask docker
+  echo "[DONE] Docker is geïnstalleerd."
+}
+
 # Specifieke afhandeling voor Docker installatie
-if [ -f "/opt/homebrew/etc/bash_completion.d/docker" ]; then
-  echo "[INFO] Verwijderen van bestaande Docker binary..."
-  sudo rm -f /opt/homebrew/etc/bash_completion.d/docker || handle_error "Verwijderen van bestaande Docker binary"
-fi
+remove_existing_docker_binary
+install_docker
 
 if [[ "$UserType" == "Developer" ]]; then
     install_or_notify gh
