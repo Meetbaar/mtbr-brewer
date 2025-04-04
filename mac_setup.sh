@@ -428,13 +428,21 @@ if [[ "$UserType" == "Developer" ]]; then
   if command -v docker &> /dev/null; then
     echo "[INFO] Docker is geïnstalleerd. Poging om lokale containers te starten..."
 
-    if [ -d "~/Development/projectnaam" ]; then
-      cd ~/Development/projectnaam
-      docker-compose up -d
-      echo "[PLACEHOLDER] docker-compose up wordt hier gestart zodra klaar."
-    else
-      echo "[ERROR] De directory ~/Development/projectnaam bestaat niet."
+    project_dir="$HOME/Development/projectnaam"
+    if [ ! -d "$project_dir" ]; then
+      echo "[ERROR] De directory $project_dir bestaat niet. Maken..."
+      mkdir -p "$project_dir"
     fi
+
+    cd "$project_dir"
+
+    if [ ! -f "docker-compose.yml" ]; then
+      echo "[ERROR] Geen docker-compose.yml bestand gevonden in $project_dir. Controleer de configuratie."
+      exit 1
+    fi
+
+    docker-compose up -d
+    echo "[PLACEHOLDER] docker-compose up wordt hier gestart zodra klaar."
 
     # Start Docker GUI
     open -a Docker
