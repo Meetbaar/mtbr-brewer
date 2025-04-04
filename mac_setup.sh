@@ -307,14 +307,41 @@ install_or_notify_cask() {
   fi
 }
 
+# Functie om Docker bij te werken of te installeren
+update_or_install_docker() {
+  if brew list --cask --versions docker &> /dev/null; then
+    echo "[INFO] Docker is al geïnstalleerd. Bijwerken..."
+    brew upgrade --cask docker
+  else
+    echo "[INFO] Docker is niet geïnstalleerd. Installeren..."
+    brew install --cask docker
+  fi
+
+  # Controleer of Docker correct werkt
+  if ! command -v docker &> /dev/null; then
+    echo "[FOUT] Docker werkt niet correct. Controleer de installatie."
+    exit 1
+  fi
+}
+
+# Functie om Docker Compose bij te werken of te installeren
+update_or_install_docker_compose() {
+  if brew list --versions docker-compose &> /dev/null; then
+    echo "[INFO] Docker Compose is al geïnstalleerd. Bijwerken..."
+    brew upgrade docker-compose
+  else
+    echo "[INFO] Docker Compose is niet geïnstalleerd. Installeren..."
+    brew install docker-compose
+  fi
+}
+
 if [[ "$UserType" == "Developer" ]]; then
     install_or_notify gh
     install_or_notify wget
     install_or_notify curl
     install_or_notify php
-    install_or_notify docker
-    install_or_notify docker-compose
-    install_or_notify_cask docker
+    update_or_install_docker
+    update_or_install_docker_compose
     install_or_notify_cask google-chrome
     install_or_notify_cask google-drive
     install_or_notify_cask spotify
@@ -322,29 +349,29 @@ if [[ "$UserType" == "Developer" ]]; then
     install_or_notify_cask postman
     install_or_notify_cask github
 
-handle_error() {
-  echo "[ERROR] Er is een fout opgetreden bij het uitvoeren van $1."
-  exit 1
-}
+    handle_error() {
+      echo "[ERROR] Er is een fout opgetreden bij het uitvoeren van $1."
+      exit 1
+    }
 
-# Check of dockutil is geïnstalleerd en voeg applicaties toe aan de Dock
-if command -v dockutil &> /dev/null; then
-    # Voeg applicaties toe aan de Dock, maar verberg eventuele foutmeldingen
-    dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Utilities/Terminal.app" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Github desktop.app" --replacing "Github desktop" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Google docs.app" --replacing "Google docs" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Google sheets.app" --replacing "Google sheets" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Google slides.app" --replacing "Google slides" --no-restart 2>/dev/null
-    # Herstart het Dock, maar verberg eventuele foutmeldingen
-    killall Dock 2>/dev/null
-else
-    echo "[ERROR] Dockutil is niet geïnstalleerd."
-    exit 1
-fi
+    # Check of dockutil is geïnstalleerd en voeg applicaties toe aan de Dock
+    if command -v dockutil &> /dev/null; then
+        # Voeg applicaties toe aan de Dock, maar verberg eventuele foutmeldingen
+        dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
+        dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
+        dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
+        dockutil --add "/Applications/Utilities/Terminal.app" --no-restart 2>/dev/null
+        dockutil --add "/Applications/Github desktop.app" --replacing "Github desktop" --no-restart 2>/dev/null
+        dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
+        dockutil --add "/Applications/Google docs.app" --replacing "Google docs" --no-restart 2>/dev/null
+        dockutil --add "/Applications/Google sheets.app" --replacing "Google sheets" --no-restart 2>/dev/null
+        dockutil --add "/Applications/Google slides.app" --replacing "Google slides" --no-restart 2>/dev/null
+        # Herstart het Dock, maar verberg eventuele foutmeldingen
+        killall Dock 2>/dev/null
+    else
+        echo "[ERROR] Dockutil is niet geïnstalleerd."
+        exit 1
+    fi
 
     if command -v code &> /dev/null; then
       code --install-extension esbenp.prettier-vscode --force
@@ -355,8 +382,8 @@ fi
 
 elif [[ "$UserType" == "Server" ]]; then
     install_or_notify nginx
-    install_or_notify docker
-    install_or_notify docker-compose
+    update_or_install_docker
+    update_or_install_docker_compose
     install_or_notify_cask google-chrome
     install_or_notify_cask google-drive
     install_or_notify redis
@@ -367,7 +394,6 @@ elif [[ "$UserType" == "Server" ]]; then
       dockutil --add "/System/Applications/Utilities/Activity Monitor.app" --no-restart
       dockutil --add "/Applications/iTerm.app" --no-restart
     fi
-
 elif [[ "$UserType" == "Overige medewerker" ]]; then
     install_or_notify_cask google-chrome
 
