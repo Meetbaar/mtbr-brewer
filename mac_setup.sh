@@ -98,6 +98,13 @@ if [[ "$createAdmin" == "y" ]]; then
     read -s -p "Voer wachtwoord in voor adminaccount: " adminPassword
     echo
 
+    # Vraag om sudo-rechten op voorhand
+sudo -v
+
+# Houd sudo actief tijdens het script
+while true; do sudo -n true; sleep 60; done 2>/dev/null &
+SUDO_KEEPALIVE_PID="$!"
+
     adminUID=$(get_next_uid)
     sudo dscl . -create /Groups/$adminGroup
     sudo dscl . -create /Users/$adminUsername
@@ -431,3 +438,4 @@ fi
 
 echo "[OK] Setup voltooid voor $UserType op $computerName"
 echo "--------------------------------------------"
+kill "$SUDO_KEEPALIVE_PID"
