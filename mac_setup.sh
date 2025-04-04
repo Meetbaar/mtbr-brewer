@@ -428,13 +428,21 @@ if [[ "$UserType" == "Developer" ]]; then
   if command -v docker &> /dev/null; then
     echo "[INFO] Docker is geïnstalleerd. Poging om lokale containers te starten..."
 
-    cd ~/Development/projectnaam
-    docker-compose up -d
+    if [ -d "~/Development/projectnaam" ]; then
+      cd ~/Development/projectnaam
+      docker-compose up -d
+      echo "[PLACEHOLDER] docker-compose up wordt hier gestart zodra klaar."
+    else
+      echo "[ERROR] De directory ~/Development/projectnaam bestaat niet."
+    fi
 
-    echo "[PLACEHOLDER] docker-compose up wordt hier gestart zodra klaar."
-    
     # Start Docker GUI
     open -a Docker
+    if [[ $? -eq 0 ]]; then
+      echo "[INFO] Docker GUI gestart."
+    else
+      echo "[ERROR] Docker GUI kon niet worden gestart."
+    fi
   else
     echo "[WAARSCHUWING] Docker is nog niet correct geïnstalleerd. Lokale hosting is niet gestart."
   fi
