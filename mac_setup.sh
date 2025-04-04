@@ -306,26 +306,13 @@ if [[ "$UserType" == "Developer" ]]; then
     install_or_notify wget
     install_or_notify curl
     install_or_notify php
+    brew install --cask docker
     install_or_notify_cask google-chrome
     install_or_notify_cask google-drive
     install_or_notify_cask spotify
     install_or_notify_cask visual-studio-code
     install_or_notify_cask postman
     install_or_notify_cask github
-
-    echo "[INFO] Oude versies van Docker worden verwijderd..."
-sudo rm -rf /Applications/Docker.app
-rm -rf ~/Library/Containers/com.docker.docker
-rm -rf ~/.docker
-sudo rm -rf /opt/homebrew/Caskroom/docker
-
-echo "[INFO] Oude symlinks worden verwijderd..."
-sudo rm -f /usr/local/bin/docker
-sudo rm -f /usr/local/bin/docker-compose
-sudo rm -f /opt/homebrew/etc/bash_completion.d/docker
-
-echo "[INFO] Docker wordt opnieuw geïnstalleerd..."
-brew install --cask docker
 
 
 handle_error() {
@@ -339,7 +326,6 @@ if command -v dockutil &> /dev/null; then
     dockutil --add "/Applications/Google Chrome.app" --replacing "Google Chrome" --no-restart 2>/dev/null
     dockutil --add "/Applications/Google drive.app" --replacing "Google drive" --no-restart 2>/dev/null
     dockutil --add "/Applications/Visual Studio Code.app" --replacing "Visual Studio Code" --no-restart 2>/dev/null
-    dockutil --add "/Applications/Docker.app" --replacing "Docker" --no-restart 2>/dev/null
     dockutil --add "/Applications/Utilities/Terminal.app" --no-restart 2>/dev/null
     dockutil --add "/Applications/Github desktop.app" --replacing "Github desktop" --no-restart 2>/dev/null
     dockutil --add "/Applications/Spotify.app" --replacing "Spotify" --no-restart 2>/dev/null
